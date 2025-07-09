@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Approval - Loome Quote Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <style>
+        .annotation {
+            position: absolute;
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .annotation::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 20px;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #ff6b6b;
+        }
+        .validation-card {
+            border-left: 4px solid #dee2e6;
+            margin-bottom: 15px;
+        }
+        .validation-card.success {
+            border-left-color: #28a745;
+        }
+        .validation-card.warning {
+            border-left-color: #ffc107;
+        }
+        .validation-card.error {
+            border-left-color: #dc3545;
+        }
+        .check-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .check-item:last-child {
+            border-bottom: none;
+        }
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        .check-icon.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .check-icon.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .check-icon.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .approval-timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        .approval-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .approval-step::after {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 40px;
+            bottom: -30px;
+            width: 2px;
+            background: #dee2e6;
+        }
+        .approval-step:last-child::after {
+            display: none;
+        }
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e9ecef;
+            color: #6c757d;
+            font-weight: 600;
+            margin-right: 20px;
+            z-index: 1;
+        }
+        .step-icon.completed {
+            background: #28a745;
+            color: white;
+        }
+        .step-icon.active {
+            background: #206bc4;
+            color: white;
+        }
+        .approval-actions {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loome Header -->
+    <header class="navbar navbar-expand-md navbar-light d-print-none">
+        <div class="container-xl">
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                <a href="#">
+                    <img src="https://via.placeholder.com/110x32/206bc4/ffffff?text=LOOME" alt="Loome" class="navbar-brand-image">
+                </a>
+            </h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="page-wrapper">
+        <div class="container-xl">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="page-pretitle">
+                            <a href="02-quote-list.html">Quotes</a> / Q-2501-A1B2C3
+                        </div>
+                        <h2 class="page-title">
+                            Quote Approval Process
+                        </h2>
+                        <div class="text-muted mt-1">
+                            Acme Corp - Office Renovation Phase 1
+                        </div>
+                    </div>
+                    <div class="col-auto ms-auto d-print-none">
+                        <a href="03-quote-view.html" class="btn btn-white">
+                            <i class="ti ti-arrow-left"></i> Back to Quote
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Validation Checks -->
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Pre-Approval Validation
+                                <span class="annotation" style="top: -35px; left: 220px;">
+                                    Automated checks before approval
+                                </span>
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- Quote Information Checks -->
+                            <div class="validation-card success">
+                                <div class="card-body">
+                                    <h5 class="mb-3">Quote Information</h5>
+                                    <div class="check-item">
+                                        <div class="check-icon success">
+                                            <i class="ti ti-check"></i>
+                                        </div>
+                                        <div class="flex-fill">
+                                            <strong>Required Fields Complete</strong>
+                                            <div class="text-muted small">All mandatory quote fields are filled</div>
+                                        </div>
+                                    </div>
+                                    <div class="check-item">
+                                        <div class="check-icon success">
+                                            <i class="ti ti-check"></i>
+                                        </div>
+                                        <div class="flex-fill">
+                                            <strong>Valid Date Range</strong>
+                                            <div class="text-muted small">Quote expires Feb 14, 2025 (29 days remaining)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Customer Validation -->
+                            <div class="validation-card success">
+                                <div class="card-body">
+                                    <h5 class="mb-3">Customer Validation</h5>
+                                    <div class="check-item">
+                                        <div class="check-icon success">
+                                            <i class="ti ti-check"></i>
+                                        </div>
+                                        <div class="flex-fill">
+                                            <strong>Credit Check Passed</strong>
+                                            <div class="text-muted small">Credit limit: $500,000 | Current exposure: $125,000</div>
+                                        </div>
+                                    </div>
+                                    <div class="check-item">
+                                        <div class="check-icon success">
+                                            <i class="ti ti-check"></i>
+                                        </div>
+                                        <div class="flex-fill">
+                                            <strong>No Credit Hold</strong>
+                                            <div class="text-muted small">Customer account is in good standing</div>
+                                        </div>
+                                    </div>
+                                    <div class="check-item">
+                                        <div class="check-icon warning">
+                                            <i class="ti ti-alert-triangle"></i>
+                                        </div>
+                                        <div class="flex-fill">
+                                            <strong>Tax Exemption Expiring</strong>
+                                            <div class="text-muted small">NY tax exemption certificate expires in 45 days</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Product Validation -->
+                            <div class="validation-card success">
+                                <div class="card-body">
+                                    <h5 class="mb-3">Product & Pricing Validation</h5>
+                                    <div class="check-item">
+                                        <div class="check-icon success">
+                                            <i class="ti ti-check"></i>
+                                        </div>
+                                        <div class="flex-fill">
+                                            <strong>All SKUs Valid</strong>
+                                            <div class="text-muted small">10 line items verified in product catalog</div>
+                                        </div>
+                                    </div>
+                                    <div class="check-item">
+                                        <div class="check-icon success">
+                                            <i class="ti ti-check"></i>
+                                        </div>
+                                        <div class="flex-fill">
+                                            <strong>Margin Requirements Met</strong>
+                                            <div class="text-muted small">Overall margin: 40% (minimum required: 35%)</div>
+                                        </div>
+                                    </div>
+                                    <div class="check-item">
+                                        <div class="check-icon success">
+                                            <i class="ti ti-check"></i>
+                                        </div>
+                                        <div class="flex-fill">
+                                            <strong>Price Calculations Verified</strong>
+                                            <div class="text-muted small">All totals and tax calculations are correct</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Project Validation -->
+                            <div class="validation-card error">
+                                <div class="card-body">
+                                    <h5 class="mb-3">Project Requirements</h5>
+                                    <div class="check-item">
+                                        <div class="check-icon error">
+                                            <i class="ti ti-x"></i>
+                                        </div>
+                                        <div class="flex-fill">
+                                            <strong>Missing Shipping Address</strong>
+                                            <div class="text-muted small">Project shipping address must be completed before approval</div>
+                                            <button class="btn btn-sm btn-danger mt-2">Add Address</button>
+                                        </div>
+                                    </div>
+                                    <div class="check-item">
+                                        <div class="check-icon success">
+                                            <i class="ti ti-check"></i>
+                                        </div>
+                                        <div class="flex-fill">
+                                            <strong>Project Status Active</strong>
+                                            <div class="text-muted small">Project is in active opportunity stage</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Approval Actions -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Approval Decision</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-danger mb-4">
+                                <h5 class="alert-title">Cannot Approve Quote</h5>
+                                Please resolve the following issues before approving:
+                                <ul class="mb-0 mt-2">
+                                    <li>Add shipping address to project</li>
+                                </ul>
+                            </div>
+
+                            <div class="approval-actions">
+                                <h5 class="mb-3">Approval Options</h5>
+                                <div class="mb-3">
+                                    <label class="form-label">Approval Notes (Optional)</label>
+                                    <textarea class="form-control" rows="3" placeholder="Add any notes about this approval..."></textarea>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-success" disabled>
+                                        <i class="ti ti-check me-2"></i>Approve Quote
+                                    </button>
+                                    <button class="btn btn-warning">
+                                        <i class="ti ti-clock me-2"></i>Request Changes
+                                    </button>
+                                    <button class="btn btn-danger">
+                                        <i class="ti ti-x me-2"></i>Reject Quote
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Approval Workflow -->
+                <div class="col-lg-4">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Approval Workflow
+                                <span class="annotation" style="top: -35px; right: 10px;">
+                                    Status tracking
+                                </span>
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="approval-timeline">
+                                <div class="approval-step">
+                                    <div class="step-icon completed">1</div>
+                                    <div>
+                                        <strong>Quote Created</strong>
+                                        <div class="text-muted small">Jan 15, 2025 by Jane Doe</div>
+                                    </div>
+                                </div>
+                                <div class="approval-step">
+                                    <div class="step-icon completed">2</div>
+                                    <div>
+                                        <strong>Sent to Customer</strong>
+                                        <div class="text-muted small">Jan 15, 2025 at 4:30 PM</div>
+                                    </div>
+                                </div>
+                                <div class="approval-step">
+                                    <div class="step-icon active">3</div>
+                                    <div>
+                                        <strong>Pending Approval</strong>
+                                        <div class="text-muted small">Awaiting internal approval</div>
+                                    </div>
+                                </div>
+                                <div class="approval-step">
+                                    <div class="step-icon">4</div>
+                                    <div>
+                                        <strong>Quote Approved</strong>
+                                        <div class="text-muted small">Ready for order placement</div>
+                                    </div>
+                                </div>
+                                <div class="approval-step">
+                                    <div class="step-icon">5</div>
+                                    <div>
+                                        <strong>Order Placed</strong>
+                                        <div class="text-muted small">Converted to Magento order</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Approval Requirements -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Approval Requirements</h3>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="text-muted mb-3">Business Rules</h6>
+                            <ul class="list-unstyled space-y-2">
+                                <li>
+                                    <i class="ti ti-circle-check text-success me-2"></i>
+                                    Minimum margin: 35%
+                                </li>
+                                <li>
+                                    <i class="ti ti-circle-check text-success me-2"></i>
+                                    Valid customer credit
+                                </li>
+                                <li>
+                                    <i class="ti ti-circle-x text-danger me-2"></i>
+                                    Complete shipping address
+                                </li>
+                                <li>
+                                    <i class="ti ti-circle-check text-success me-2"></i>
+                                    All products validated
+                                </li>
+                            </ul>
+
+                            <hr>
+
+                            <h6 class="text-muted mb-3">Approval Authority</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <td>Up to $50k</td>
+                                    <td class="text-end">Project Manager</td>
+                                </tr>
+                                <tr>
+                                    <td>$50k - $250k</td>
+                                    <td class="text-end">Sales Director</td>
+                                </tr>
+                                <tr>
+                                    <td>Over $250k</td>
+                                    <td class="text-end">VP Sales</td>
+                                </tr>
+                            </table>
+
+                            <div class="alert alert-info mt-3">
+                                <strong>Your Authority:</strong> $250,000
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Request Changes Modal -->
+    <div class="modal modal-blur fade" id="changesModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Request Changes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">What needs to be changed?</label>
+                        <div class="form-selectgroup form-selectgroup-vertical">
+                            <label class="form-selectgroup-item">
+                                <input type="checkbox" name="changes" value="pricing" class="form-selectgroup-input">
+                                <span class="form-selectgroup-label">Pricing adjustments needed</span>
+                            </label>
+                            <label class="form-selectgroup-item">
+                                <input type="checkbox" name="changes" value="products" class="form-selectgroup-input">
+                                <span class="form-selectgroup-label">Product changes required</span>
+                            </label>
+                            <label class="form-selectgroup-item">
+                                <input type="checkbox" name="changes" value="terms" class="form-selectgroup-input">
+                                <span class="form-selectgroup-label">Terms need modification</span>
+                            </label>
+                            <label class="form-selectgroup-item">
+                                <input type="checkbox" name="changes" value="other" class="form-selectgroup-input">
+                                <span class="form-selectgroup-label">Other changes</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Details</label>
+                        <textarea class="form-control" rows="4" placeholder="Describe the changes needed..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-warning">Send Change Request</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+</body>
+</html>

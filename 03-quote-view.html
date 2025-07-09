@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Quote - Loome Quote Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <style>
+        .annotation {
+            position: absolute;
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .annotation::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 20px;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #ff6b6b;
+        }
+        .status-approved { 
+            background-color: #fce4ec; 
+            color: #c2185b; 
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .info-row {
+            padding: 12px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .summary-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .internal-only {
+            background: #fee;
+            border: 1px solid #fcc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .version-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        .version-timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 20px;
+            bottom: 0;
+            width: 2px;
+            background: #dee2e6;
+        }
+        .version-item {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .version-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #206bc4;
+            border: 2px solid #fff;
+        }
+        .approval-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loome Header -->
+    <header class="navbar navbar-expand-md navbar-light d-print-none">
+        <div class="container-xl">
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                <a href="#">
+                    <img src="https://via.placeholder.com/110x32/206bc4/ffffff?text=LOOME" alt="Loome" class="navbar-brand-image">
+                </a>
+            </h1>
+            <div class="navbar-nav flex-row order-md-last">
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link d-flex lh-1 text-reset p-0">
+                        <span class="avatar avatar-sm">JD</span>
+                        <div class="d-none d-xl-block ps-2">
+                            <div>Jane Doe</div>
+                            <div class="mt-1 small text-muted">Project Manager</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="page-wrapper">
+        <div class="container-xl">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="page-pretitle">
+                            <a href="02-quote-list.html">Quotes</a> / Q-2501-A1B2C3
+                        </div>
+                        <h2 class="page-title">
+                            Acme Corp - Office Renovation Phase 1
+                        </h2>
+                        <div class="text-muted mt-1">
+                            <span class="status-approved me-3">Approved</span>
+                            <span class="me-3">Version: REV-3</span>
+                            <span>Valid until: Feb 14, 2025</span>
+                        </div>
+                    </div>
+                    <div class="col-auto ms-auto d-print-none">
+                        <div class="btn-list">
+                            <button class="btn btn-white" onclick="window.print()">
+                                <i class="ti ti-printer"></i> Print
+                            </button>
+                            <button class="btn btn-white" data-bs-toggle="modal" data-bs-target="#pdfModal">
+                                <i class="ti ti-file-export"></i> Export PDF
+                            </button>
+                            <a href="01-quote-create.html" class="btn btn-white">
+                                <i class="ti ti-edit"></i> Edit
+                            </a>
+                            <button class="btn btn-success">
+                                <i class="ti ti-shopping-cart"></i> Place Order
+                                <span class="annotation" style="top: -35px; right: 0;">
+                                    Converts to Magento order
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row row-cards">
+                <!-- Quote Details -->
+                <div class="col-lg-8">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h3 class="card-title">Quote Information</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="info-row">
+                                        <small class="text-muted">Quote ID</small>
+                                        <div class="fw-bold">Q-2501-A1B2C3</div>
+                                    </div>
+                                    <div class="info-row">
+                                        <small class="text-muted">Customer</small>
+                                        <div class="fw-bold">Acme Corp</div>
+                                    </div>
+                                    <div class="info-row">
+                                        <small class="text-muted">Project Location</small>
+                                        <div>123 Main St, New York, NY 10001</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-row">
+                                        <small class="text-muted">Quote Date</small>
+                                        <div>January 15, 2025</div>
+                                    </div>
+                                    <div class="info-row">
+                                        <small class="text-muted">Quoted By</small>
+                                        <div>Jane Doe</div>
+                                    </div>
+                                    <div class="info-row">
+                                        <small class="text-muted">Drawing Version</small>
+                                        <div>v1.2</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Line Items -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h3 class="card-title">Line Items</h3>
+                            <div class="card-actions">
+                                <span class="text-muted">10 items</span>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-vcenter card-table">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Qty</th>
+                                        <th>Manufacturer</th>
+                                        <th>Part #</th>
+                                        <th>Description</th>
+                                        <th class="text-end">Unit Price</th>
+                                        <th class="text-end">Extended</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Fixture</td>
+                                        <td>25</td>
+                                        <td>Acme Lighting</td>
+                                        <td>LED-PANEL-2X4</td>
+                                        <td>2x4 LED Panel Light, 4000K</td>
+                                        <td class="text-end">$125.00</td>
+                                        <td class="text-end fw-bold">$3,125.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Control</td>
+                                        <td>5</td>
+                                        <td>LightControl Pro</td>
+                                        <td>DIM-WIFI-4CH</td>
+                                        <td>4-Channel WiFi Dimmer</td>
+                                        <td class="text-end">$450.00</td>
+                                        <td class="text-end fw-bold">$2,250.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fixture</td>
+                                        <td>40</td>
+                                        <td>Acme Lighting</td>
+                                        <td>LED-STRIP-16FT</td>
+                                        <td>16ft LED Strip Light</td>
+                                        <td class="text-end">$85.00</td>
+                                        <td class="text-end fw-bold">$3,400.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Accessory</td>
+                                        <td>100</td>
+                                        <td>Generic</td>
+                                        <td>MOUNT-CLIP-U</td>
+                                        <td>Universal Mounting Clips</td>
+                                        <td class="text-end">$2.50</td>
+                                        <td class="text-end fw-bold">$250.00</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="6" class="text-end">Subtotal:</td>
+                                        <td class="text-end fw-bold">$42,125.00</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Financial Summary -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Financial Summary</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="summary-box">
+                                <div class="row">
+                                    <div class="col-6 text-end">Subtotal:</div>
+                                    <div class="col-6">$42,125.00</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 text-end">Freight (5%):</div>
+                                    <div class="col-6">$2,106.25</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 text-end">Sales Tax (8.875%):</div>
+                                    <div class="col-6">$3,925.48</div>
+                                </div>
+                                <hr>
+                                <div class="row h4">
+                                    <div class="col-6 text-end">Grand Total:</div>
+                                    <div class="col-6 fw-bold">$48,156.73</div>
+                                </div>
+                            </div>
+
+                            <div class="internal-only">
+                                <h5 class="text-danger mb-3">
+                                    <i class="ti ti-lock me-1"></i>Internal Information Only
+                                </h5>
+                                <div class="row mb-2">
+                                    <div class="col-6">Total Cost:</div>
+                                    <div class="col-6 text-end">$25,275.00</div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-6">Gross Profit:</div>
+                                    <div class="col-6 text-end">$16,850.00</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">Margin:</div>
+                                    <div class="col-6 text-end fw-bold">40.0%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar -->
+                <div class="col-lg-4">
+                    <!-- Approval Status -->
+                    <div class="card mb-3">
+                        <div class="card-body text-center">
+                            <div class="approval-badge mb-3">
+                                <i class="ti ti-circle-check"></i>
+                                Quote Approved
+                            </div>
+                            <p class="text-muted mb-1">Approved by John Manager</p>
+                            <p class="text-muted">on January 16, 2025 at 2:30 PM</p>
+                            <button class="btn btn-success w-100 mt-3">
+                                <i class="ti ti-shopping-cart me-2"></i>
+                                Place Order
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Version History -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Version History</h3>
+                            <span class="annotation" style="top: -35px; right: 10px;">
+                                Track all quote versions
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <div class="version-timeline">
+                                <div class="version-item">
+                                    <div class="fw-bold">REV-3 (Current)</div>
+                                    <div class="text-muted small">Jan 15, 2025 - 3:45 PM</div>
+                                    <div class="small">Updated pricing, added controls</div>
+                                </div>
+                                <div class="version-item">
+                                    <div class="fw-bold">REV-2</div>
+                                    <div class="text-muted small">Jan 14, 2025 - 11:20 AM</div>
+                                    <div class="small">Added LED strips per request</div>
+                                </div>
+                                <div class="version-item">
+                                    <div class="fw-bold">REV-1</div>
+                                    <div class="text-muted small">Jan 13, 2025 - 2:15 PM</div>
+                                    <div class="small">Initial quote</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary w-100">
+                                Compare Versions
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h3 class="card-title">Quick Actions</h3>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="ti ti-copy me-2"></i>Duplicate Quote
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="ti ti-mail me-2"></i>Email to Customer
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="ti ti-file-plus me-2"></i>Create Change Order
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="ti ti-archive me-2"></i>Archive Quote
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF Export Modal -->
+    <div class="modal modal-blur fade" id="pdfModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Export Quote as PDF</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-selectgroup form-selectgroup-boxes d-flex flex-column">
+                        <label class="form-selectgroup-item flex-fill">
+                            <input type="radio" name="pdf-type" value="customer" class="form-selectgroup-input" checked>
+                            <div class="form-selectgroup-label d-flex align-items-center p-3">
+                                <div class="me-3">
+                                    <span class="form-selectgroup-check"></span>
+                                </div>
+                                <div>
+                                    <strong>Customer PDF</strong>
+                                    <div class="text-muted small">Shows pricing and customer-facing information only</div>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="form-selectgroup-item flex-fill">
+                            <input type="radio" name="pdf-type" value="internal" class="form-selectgroup-input">
+                            <div class="form-selectgroup-label d-flex align-items-center p-3">
+                                <div class="me-3">
+                                    <span class="form-selectgroup-check"></span>
+                                </div>
+                                <div>
+                                    <strong>Internal PDF</strong>
+                                    <div class="text-muted small">Includes costs, margins, and internal notes</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-check">
+                            <input class="form-check-input" type="checkbox" checked>
+                            <span class="form-check-label">Include line item pricing</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">
+                        <i class="ti ti-download me-2"></i>Download PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+</body>
+</html>

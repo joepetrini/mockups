@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Search & Catalog - Loome Quote Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <style>
+        .annotation {
+            position: absolute;
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .annotation::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 20px;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #ff6b6b;
+        }
+        .search-demo {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .autocomplete-container {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-top: none;
+            max-height: 300px;
+            overflow-y: auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        .autocomplete-item {
+            padding: 12px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+        }
+        .autocomplete-item:hover,
+        .autocomplete-item.active {
+            background: #e3f2fd;
+        }
+        .autocomplete-item .product-info {
+            flex-grow: 1;
+        }
+        .autocomplete-item .part-number {
+            font-weight: 600;
+            color: #206bc4;
+            font-size: 0.9rem;
+        }
+        .autocomplete-item .manufacturer {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+        .autocomplete-item .description {
+            color: #495057;
+            font-size: 0.875rem;
+            margin-top: 2px;
+        }
+        .autocomplete-item .pricing {
+            text-align: right;
+            min-width: 100px;
+        }
+        .autocomplete-item .sale-price {
+            font-weight: 600;
+            color: #28a745;
+        }
+        .autocomplete-item .cost {
+            font-size: 0.75rem;
+            color: #dc3545;
+        }
+        .search-hint {
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 0.875rem;
+        }
+        .catalog-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #206bc4;
+        }
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        .keyboard-shortcuts {
+            background: #fffbeb;
+            border: 1px solid #fbbf24;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+        .shortcut-key {
+            display: inline-block;
+            background: #374151;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.875rem;
+            margin: 0 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loome Header -->
+    <header class="navbar navbar-expand-md navbar-light d-print-none">
+        <div class="container-xl">
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                <a href="#">
+                    <img src="https://via.placeholder.com/110x32/206bc4/ffffff?text=LOOME" alt="Loome" class="navbar-brand-image">
+                </a>
+            </h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="page-wrapper">
+        <div class="container-xl">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h2 class="page-title">
+                            Product Search & Catalog Integration
+                        </h2>
+                        <div class="text-muted mt-1">
+                            Interactive demonstration of product autocomplete functionality
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Search Demo -->
+            <div class="search-demo">
+                <h3 class="text-center mb-4">
+                    Try the Product Search
+                    <span class="annotation" style="top: -35px; right: 50%; transform: translateX(50%);">
+                        Type to see autocomplete in action
+                    </span>
+                </h3>
+                <div class="autocomplete-container">
+                    <input 
+                        type="text" 
+                        class="form-control form-control-lg" 
+                        placeholder="Search by part number, manufacturer, or description..."
+                        value="LED"
+                        id="productSearch"
+                    >
+                    <div class="autocomplete-dropdown" id="searchResults">
+                        <div class="autocomplete-item active">
+                            <div class="product-info">
+                                <div class="part-number">LED-PANEL-2X4</div>
+                                <div class="manufacturer">Acme Lighting</div>
+                                <div class="description">2x4 LED Panel Light, 4000K, 50W, DLC Premium</div>
+                            </div>
+                            <div class="pricing">
+                                <div class="sale-price">$125.00</div>
+                                <div class="cost">Cost: $75.00</div>
+                            </div>
+                        </div>
+                        <div class="autocomplete-item">
+                            <div class="product-info">
+                                <div class="part-number">LED-PANEL-2X2</div>
+                                <div class="manufacturer">Acme Lighting</div>
+                                <div class="description">2x2 LED Panel Light, 4000K, 40W, DLC Premium</div>
+                            </div>
+                            <div class="pricing">
+                                <div class="sale-price">$95.00</div>
+                                <div class="cost">Cost: $57.00</div>
+                            </div>
+                        </div>
+                        <div class="autocomplete-item">
+                            <div class="product-info">
+                                <div class="part-number">LED-STRIP-16FT</div>
+                                <div class="manufacturer">FlexLight Pro</div>
+                                <div class="description">16ft LED Strip Light, RGB+W, 24V, IP65 Rated</div>
+                            </div>
+                            <div class="pricing">
+                                <div class="sale-price">$85.00</div>
+                                <div class="cost">Cost: $45.00</div>
+                            </div>
+                        </div>
+                        <div class="autocomplete-item">
+                            <div class="product-info">
+                                <div class="part-number">LED-HIGHBAY-200W</div>
+                                <div class="manufacturer">Industrial Lighting Co</div>
+                                <div class="description">200W LED High Bay, 5000K, 28000 Lumens, 0-10V Dimming</div>
+                            </div>
+                            <div class="pricing">
+                                <div class="sale-price">$285.00</div>
+                                <div class="cost">Cost: $165.00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="search-hint">
+                    <i class="ti ti-bulb me-2"></i>
+                    <strong>Search Tips:</strong> Try searching for "panel", "2x4", "acme", or any part of the description. 
+                    The search looks through part numbers, manufacturers, and descriptions.
+                </div>
+            </div>
+
+            <!-- Keyboard Shortcuts -->
+            <div class="keyboard-shortcuts">
+                <h5 class="mb-2">⌨️ Keyboard Navigation</h5>
+                <div>
+                    <span class="shortcut-key">↑</span> <span class="shortcut-key">↓</span> Navigate through results
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <span class="shortcut-key">Enter</span> Select highlighted item
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <span class="shortcut-key">Esc</span> Close dropdown
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <span class="shortcut-key">Tab</span> Auto-complete selection
+                </div>
+            </div>
+
+            <!-- Catalog Statistics -->
+            <h3 class="mt-5 mb-3">Product Catalog Overview</h3>
+            <div class="catalog-stats">
+                <div class="stat-card">
+                    <div class="stat-value">2,847</div>
+                    <div class="stat-label">Total Products</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">156</div>
+                    <div class="stat-label">Manufacturers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">94%</div>
+                    <div class="stat-label">With Pricing</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">1.2s</div>
+                    <div class="stat-label">Avg Search Time</div>
+                </div>
+            </div>
+
+            <!-- Feature Details -->
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4 class="mb-3">
+                        <i class="ti ti-search me-2"></i>Smart Search Algorithm
+                    </h4>
+                    <p class="text-muted mb-3">The search system uses weighted scoring:</p>
+                    <ul class="list-unstyled space-y-2">
+                        <li>✓ Exact part number matches rank highest</li>
+                        <li>✓ Manufacturer matches get priority</li>
+                        <li>✓ Fuzzy matching for typos</li>
+                        <li>✓ Recent/frequently used items boosted</li>
+                    </ul>
+                    <div class="alert alert-info mt-3">
+                        <strong>HTMX Implementation:</strong><br>
+                        <code>hx-trigger="keyup changed delay:300ms"</code>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h4 class="mb-3">
+                        <i class="ti ti-database me-2"></i>Auto-Learning Catalog
+                        <span class="annotation" style="top: -35px; right: 20px;">
+                            Builds catalog over time
+                        </span>
+                    </h4>
+                    <p class="text-muted mb-3">The catalog grows automatically:</p>
+                    <ul class="list-unstyled space-y-2">
+                        <li>✓ New products saved on blur</li>
+                        <li>✓ Pricing history tracked</li>
+                        <li>✓ Customer-specific pricing stored</li>
+                        <li>✓ Duplicate detection</li>
+                    </ul>
+                    <div class="mt-3 p-3 bg-light rounded">
+                        <small class="text-muted">Products added this month: <strong>127</strong></small>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h4 class="mb-3">
+                        <i class="ti ti-receipt me-2"></i>Pricing Integration
+                    </h4>
+                    <p class="text-muted mb-3">When a product is selected:</p>
+                    <ol class="ps-3">
+                        <li>Manufacturer auto-fills</li>
+                        <li>Cost and multiplier populate</li>
+                        <li>Sale price calculates automatically</li>
+                        <li>Description fills if available</li>
+                        <li>Customer pricing overrides apply</li>
+                    </ol>
+                    <div class="alert alert-warning mt-3">
+                        Cost and multiplier fields are internal only
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Implementation -->
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h3 class="card-title">Technical Implementation Details</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Frontend (HTMX)</h5>
+                            <pre class="bg-light p-3 rounded"><code>&lt;input type="text" 
+       name="part_number"
+       hx-get="/quotes/htmx/product-search"
+       hx-trigger="keyup changed delay:300ms"
+       hx-target="#suggestions-{item.id}"
+       hx-indicator=".htmx-indicator"
+       hx-vals='{"customer_id": "{{ quote.organization.id }}"}'&gt;</code></pre>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Backend (Django View)</h5>
+                            <pre class="bg-light p-3 rounded"><code>def product_search(request):
+    query = request.GET.get('q', '')
+    customer_id = request.GET.get('customer_id')
+    
+    # Search with customer-specific pricing
+    products = ProductService.search(
+        query=query,
+        customer_id=customer_id,
+        limit=10
+    )
+    
+    return render(request, 
+        'quotes/partials/product_suggestions.html',
+        {'products': products}
+    )</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <h5>Performance Optimizations</h5>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="p-3 bg-light rounded">
+                                    <h6>Database</h6>
+                                    <ul class="list-unstyled mb-0">
+                                        <li>• Full-text search indexes</li>
+                                        <li>• Materialized views for pricing</li>
+                                        <li>• Redis cache for frequent searches</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p-3 bg-light rounded">
+                                    <h6>Frontend</h6>
+                                    <ul class="list-unstyled mb-0">
+                                        <li>• 300ms debounce on keyup</li>
+                                        <li>• Result limit of 10 items</li>
+                                        <li>• Lazy loading for images</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p-3 bg-light rounded">
+                                    <h6>API</h6>
+                                    <ul class="list-unstyled mb-0">
+                                        <li>• Pagination support</li>
+                                        <li>• Field filtering</li>
+                                        <li>• Response compression</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+    <script>
+        // Demo interactivity
+        const searchInput = document.getElementById('productSearch');
+        const results = document.getElementById('searchResults');
+        let selectedIndex = 0;
+
+        searchInput.addEventListener('focus', () => {
+            results.style.display = 'block';
+        });
+
+        searchInput.addEventListener('blur', () => {
+            setTimeout(() => results.style.display = 'none', 200);
+        });
+
+        searchInput.addEventListener('keydown', (e) => {
+            const items = results.querySelectorAll('.autocomplete-item');
+            
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+                updateSelection(items);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedIndex = Math.max(selectedIndex - 1, 0);
+                updateSelection(items);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (items[selectedIndex]) {
+                    selectItem(items[selectedIndex]);
+                }
+            }
+        });
+
+        function updateSelection(items) {
+            items.forEach((item, index) => {
+                if (index === selectedIndex) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        function selectItem(item) {
+            const partNumber = item.querySelector('.part-number').textContent;
+            searchInput.value = partNumber;
+            results.style.display = 'none';
+        }
+
+        // Click to select
+        results.querySelectorAll('.autocomplete-item').forEach(item => {
+            item.addEventListener('click', () => selectItem(item));
+        });
+    </script>
+</body>
+</html>

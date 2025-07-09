@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Version History - Loome Quote Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <style>
+        .annotation {
+            position: absolute;
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .annotation::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 20px;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #ff6b6b;
+        }
+        .version-selector {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .version-timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        .version-timeline::before {
+            content: '';
+            position: absolute;
+            left: 40px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #dee2e6;
+        }
+        .version-item {
+            position: relative;
+            padding-left: 80px;
+            padding-bottom: 30px;
+        }
+        .version-item::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #fff;
+            border: 3px solid #206bc4;
+        }
+        .version-item.current::before {
+            background: #206bc4;
+        }
+        .version-card {
+            background: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.2s;
+        }
+        .version-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .change-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .change-indicator.added {
+            background: #d4edda;
+            color: #155724;
+        }
+        .change-indicator.removed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .change-indicator.modified {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .diff-view {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+        .diff-added {
+            background: #d4edda;
+            color: #155724;
+            padding: 2px 4px;
+        }
+        .diff-removed {
+            background: #f8d7da;
+            color: #721c24;
+            text-decoration: line-through;
+            padding: 2px 4px;
+        }
+        .comparison-table td {
+            vertical-align: top;
+        }
+        .comparison-table .changed {
+            background: #fff3cd;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loome Header -->
+    <header class="navbar navbar-expand-md navbar-light d-print-none">
+        <div class="container-xl">
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                <a href="#">
+                    <img src="https://via.placeholder.com/110x32/206bc4/ffffff?text=LOOME" alt="Loome" class="navbar-brand-image">
+                </a>
+            </h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="page-wrapper">
+        <div class="container-xl">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="page-pretitle">
+                            <a href="02-quote-list.html">Quotes</a> / Q-2501-A1B2C3
+                        </div>
+                        <h2 class="page-title">
+                            Version History & Comparison
+                        </h2>
+                        <div class="text-muted mt-1">
+                            Acme Corp - Office Renovation Phase 1
+                        </div>
+                    </div>
+                    <div class="col-auto ms-auto d-print-none">
+                        <a href="03-quote-view.html" class="btn btn-white">
+                            <i class="ti ti-arrow-left"></i> Back to Quote
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Version Selector -->
+            <div class="version-selector">
+                <h3 class="mb-3">
+                    Quote Version Retrieval
+                    <span class="annotation" style="top: -35px; left: 250px;">
+                        Three-level dropdown navigation
+                    </span>
+                </h3>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">1. Select Customer</label>
+                        <select class="form-select">
+                            <option>Choose customer...</option>
+                            <option selected>Acme Corp</option>
+                            <option>TechStart Inc</option>
+                            <option>Global Retail Co</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">2. Select Project</label>
+                        <select class="form-select">
+                            <option>Choose project...</option>
+                            <option selected>Office Renovation - Phase 1</option>
+                            <option>Warehouse Expansion</option>
+                            <option>Lobby Upgrade</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">3. Select Version</label>
+                        <select class="form-select">
+                            <option>Choose version...</option>
+                            <option>REV-3 (Current)</option>
+                            <option>REV-2</option>
+                            <option selected>REV-1</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-primary">Load Selected Version</button>
+                    <button class="btn btn-outline-secondary ms-2">Compare Versions</button>
+                </div>
+            </div>
+
+            <!-- Version Timeline -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">Version Timeline</h3>
+                </div>
+                <div class="card-body">
+                    <div class="version-timeline">
+                        <!-- Current Version -->
+                        <div class="version-item current">
+                            <div class="version-card">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <h4 class="mb-1">
+                                            REV-3
+                                            <span class="badge bg-primary ms-2">Current</span>
+                                        </h4>
+                                        <p class="text-muted mb-0">January 15, 2025 at 3:45 PM by Jane Doe</p>
+                                    </div>
+                                    <div>
+                                        <strong>$48,156.73</strong>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <p class="mb-2">Changes in this version:</p>
+                                    <div class="d-flex gap-2 flex-wrap">
+                                        <span class="change-indicator modified">
+                                            <i class="ti ti-edit"></i> Updated pricing
+                                        </span>
+                                        <span class="change-indicator added">
+                                            <i class="ti ti-plus"></i> Added 5 control items
+                                        </span>
+                                        <span class="change-indicator modified">
+                                            <i class="ti ti-edit"></i> Changed freight to 5%
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <a href="03-quote-view.html" class="btn btn-sm btn-primary">View</a>
+                                    <button class="btn btn-sm btn-outline-secondary">Restore</button>
+                                    <button class="btn btn-sm btn-outline-secondary">Export</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2 -->
+                        <div class="version-item">
+                            <div class="version-card">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <h4 class="mb-1">REV-2</h4>
+                                        <p class="text-muted mb-0">January 14, 2025 at 11:20 AM by John Smith</p>
+                                    </div>
+                                    <div>
+                                        <strong>$42,500.00</strong>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <p class="mb-2">Changes in this version:</p>
+                                    <div class="d-flex gap-2 flex-wrap">
+                                        <span class="change-indicator added">
+                                            <i class="ti ti-plus"></i> Added 40 LED strips
+                                        </span>
+                                        <span class="change-indicator removed">
+                                            <i class="ti ti-minus"></i> Removed 10 panels
+                                        </span>
+                                        <span class="change-indicator modified">
+                                            <i class="ti ti-edit"></i> Updated notes
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-primary">View</button>
+                                    <button class="btn btn-sm btn-outline-secondary">Restore</button>
+                                    <button class="btn btn-sm btn-outline-secondary">Compare to Current</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 1 -->
+                        <div class="version-item">
+                            <div class="version-card">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <h4 class="mb-1">REV-1</h4>
+                                        <p class="text-muted mb-0">January 13, 2025 at 2:15 PM by Jane Doe</p>
+                                    </div>
+                                    <div>
+                                        <strong>$35,200.00</strong>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <p class="mb-2">Initial quote creation</p>
+                                    <div class="d-flex gap-2 flex-wrap">
+                                        <span class="change-indicator added">
+                                            <i class="ti ti-plus"></i> 35 panel lights
+                                        </span>
+                                        <span class="change-indicator added">
+                                            <i class="ti ti-plus"></i> 100 accessories
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-primary">View</button>
+                                    <button class="btn btn-sm btn-outline-secondary">Restore</button>
+                                    <button class="btn btn-sm btn-outline-secondary">Compare to Current</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Version Comparison -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        Version Comparison: REV-1 vs REV-3 (Current)
+                        <span class="annotation" style="top: -35px; right: 20px;">
+                            Side-by-side comparison
+                        </span>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <!-- Summary of Changes -->
+                    <div class="alert alert-info mb-4">
+                        <h5 class="alert-title">Summary of Changes</h5>
+                        <ul class="mb-0">
+                            <li>Total increased by <strong>$12,956.73</strong> (36.8%)</li>
+                            <li><strong>5 items added</strong>, 0 items removed, 3 items modified</li>
+                            <li>Margin improved from 38% to 40%</li>
+                            <li>Freight calculation changed from fixed $500 to 5%</li>
+                        </ul>
+                    </div>
+
+                    <!-- Detailed Comparison Table -->
+                    <h5 class="mb-3">Quote Information Changes</h5>
+                    <table class="table comparison-table">
+                        <thead>
+                            <tr>
+                                <th width="30%">Field</th>
+                                <th width="35%">REV-1</th>
+                                <th width="35%">REV-3 (Current)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Quote Date</td>
+                                <td>January 13, 2025</td>
+                                <td>January 15, 2025</td>
+                            </tr>
+                            <tr class="changed">
+                                <td>Valid Until</td>
+                                <td><span class="diff-removed">February 12, 2025</span></td>
+                                <td><span class="diff-added">February 14, 2025</span></td>
+                            </tr>
+                            <tr class="changed">
+                                <td>Freight</td>
+                                <td><span class="diff-removed">$500.00 (fixed)</span></td>
+                                <td><span class="diff-added">5% of subtotal</span></td>
+                            </tr>
+                            <tr>
+                                <td>Tax Rate</td>
+                                <td>8.875%</td>
+                                <td>8.875%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h5 class="mb-3 mt-4">Line Item Changes</h5>
+                    <div class="diff-view">
+                        <div class="mb-2">
+                            <span class="diff-added">+ Control | 5 | LightControl Pro | DIM-WIFI-4CH | $450.00 | $2,250.00</span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="diff-added">+ Fixture | 40 | Acme Lighting | LED-STRIP-16FT | $85.00 | $3,400.00</span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="diff-removed">- Fixture | 10 | Acme Lighting | LED-PANEL-1X4 | $95.00 | $950.00</span>
+                        </div>
+                        <div class="mb-2">
+                            ~ Fixture | 25 | Acme Lighting | LED-PANEL-2X4 | 
+                            <span class="diff-removed">$115.00</span> → 
+                            <span class="diff-added">$125.00</span> | 
+                            <span class="diff-removed">$2,875.00</span> → 
+                            <span class="diff-added">$3,125.00</span>
+                        </div>
+                    </div>
+
+                    <h5 class="mb-3 mt-4">Financial Impact</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="text-center">REV-1</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Subtotal</td>
+                                        <td class="text-end">$32,500.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Freight</td>
+                                        <td class="text-end">$500.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tax</td>
+                                        <td class="text-end">$2,200.00</td>
+                                    </tr>
+                                    <tr class="fw-bold">
+                                        <td>Total</td>
+                                        <td class="text-end">$35,200.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="text-center">REV-3 (Current)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Subtotal</td>
+                                        <td class="text-end">$42,125.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Freight (5%)</td>
+                                        <td class="text-end">$2,106.25</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tax</td>
+                                        <td class="text-end">$3,925.48</td>
+                                    </tr>
+                                    <tr class="fw-bold">
+                                        <td>Total</td>
+                                        <td class="text-end">$48,156.73</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 d-flex gap-2">
+                        <button class="btn btn-primary">Use REV-3 (Current)</button>
+                        <button class="btn btn-outline-primary">Restore REV-1</button>
+                        <button class="btn btn-white">Export Comparison</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+</body>
+</html>

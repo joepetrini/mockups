@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Item Management - Loome Quote Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <style>
+        .annotation {
+            position: absolute;
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .annotation::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 20px;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #ff6b6b;
+        }
+        .calculation-demo {
+            background: #e3f2fd;
+            border: 2px dashed #1976d2;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-top: none;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+        .autocomplete-dropdown.show {
+            display: block;
+        }
+        .autocomplete-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .autocomplete-item:hover,
+        .autocomplete-item.active {
+            background: #e3f2fd;
+        }
+        .autocomplete-item .part-number {
+            font-weight: 600;
+            color: #206bc4;
+        }
+        .autocomplete-item .description {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+        .field-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-left: 4px;
+        }
+        .field-indicator.required {
+            background: #dc3545;
+        }
+        .field-indicator.optional {
+            background: #6c757d;
+        }
+        .internal-field {
+            background: #fee !important;
+            border-color: #dc3545 !important;
+        }
+        .interactive-demo {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .optional-fields-row {
+            background: #f0f4f7;
+        }
+        .htmx-indicator {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #206bc4;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+        .htmx-request .htmx-indicator {
+            display: inline-block;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loome Header -->
+    <header class="navbar navbar-expand-md navbar-light d-print-none">
+        <div class="container-xl">
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                <a href="#">
+                    <img src="https://via.placeholder.com/110x32/206bc4/ffffff?text=LOOME" alt="Loome" class="navbar-brand-image">
+                </a>
+            </h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="page-wrapper">
+        <div class="container-xl">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h2 class="page-title">
+                            Line Item Management Demo
+                        </h2>
+                        <div class="text-muted mt-1">
+                            Interactive demonstration of the line item grid functionality
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Overview -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">Key Features</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h5>🔍 Product Search</h5>
+                            <p class="text-muted small">Autocomplete from product catalog with keyboard navigation</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h5>🧮 Auto-Calculations</h5>
+                            <p class="text-muted small">Real-time price calculations as you type</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h5>👁️ Show/Hide Fields</h5>
+                            <p class="text-muted small">Toggle optional fields for cleaner interface</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h5>📋 Duplicate Items</h5>
+                            <p class="text-muted small">Quick duplication of complex line items</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Line Item Grid -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="ti ti-list-details me-2"></i>Line Items
+                    </h3>
+                    <div class="card-actions">
+                        <button class="btn btn-sm btn-outline-primary me-2" id="toggleOptional">
+                            <i class="ti ti-eye"></i> Show Optional Fields
+                        </button>
+                        <button class="btn btn-sm btn-primary">
+                            <i class="ti ti-plus"></i> Add Quote Item
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-vcenter">
+                            <thead>
+                                <tr>
+                                    <th width="40"></th>
+                                    <th>Type <span class="field-indicator required"></span></th>
+                                    <th width="80">Qty <span class="field-indicator required"></span></th>
+                                    <th>Manufacturer <span class="field-indicator required"></span></th>
+                                    <th>
+                                        Part # <span class="field-indicator required"></span>
+                                        <span class="annotation" style="top: -35px; left: 50px;">
+                                            Autocomplete searches catalog
+                                        </span>
+                                    </th>
+                                    <th>
+                                        Cost <span class="field-indicator required"></span>
+                                        <span class="annotation" style="top: -35px; left: 30px;">
+                                            Internal only - red fields
+                                        </span>
+                                    </th>
+                                    <th>Multiplier <span class="field-indicator required"></span></th>
+                                    <th>Sale Price <span class="field-indicator required"></span></th>
+                                    <th>Extended</th>
+                                    <th width="40"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Example Line Item -->
+                                <tr>
+                                    <td>
+                                        <button class="btn btn-icon btn-sm btn-ghost-primary" title="Duplicate">
+                                            <i class="ti ti-copy"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm" value="Fixture" style="width: 100px;">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm" value="10" id="qty1">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm" value="Acme Lighting">
+                                    </td>
+                                    <td style="position: relative;">
+                                        <input type="text" class="form-control form-control-sm" value="LED-PANEL-2X4" id="partSearch">
+                                        <div class="htmx-indicator ms-2"></div>
+                                        <div class="autocomplete-dropdown" id="autocompleteDropdown">
+                                            <div class="autocomplete-item active">
+                                                <div class="part-number">LED-PANEL-2X4</div>
+                                                <div class="description">2x4 LED Panel Light, 4000K, 50W</div>
+                                            </div>
+                                            <div class="autocomplete-item">
+                                                <div class="part-number">LED-PANEL-2X2</div>
+                                                <div class="description">2x2 LED Panel Light, 4000K, 40W</div>
+                                            </div>
+                                            <div class="autocomplete-item">
+                                                <div class="part-number">LED-PANEL-1X4</div>
+                                                <div class="description">1x4 LED Panel Light, 4000K, 40W</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm internal-field" value="$75.00" id="cost1">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm internal-field" value="1.667" id="multiplier1">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm" value="$125.00" id="salePrice1">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm bg-light" value="$1,250.00" readonly id="extended1">
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-icon btn-sm btn-ghost-danger" title="Delete">
+                                            <i class="ti ti-x"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Optional Fields Row -->
+                                <tr class="optional-fields-row" style="display: none;">
+                                    <td colspan="10">
+                                        <div class="p-2">
+                                            <div class="row g-2">
+                                                <div class="col-md-4">
+                                                    <input type="text" class="form-control form-control-sm" placeholder="Description (optional)">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <input type="text" class="form-control form-control-sm" placeholder="Customer Notes (optional)">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input type="text" class="form-control form-control-sm" placeholder="Lead Time (optional)">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <input type="text" class="form-control form-control-sm" placeholder="Location (optional)">
+                                                </div>
+                                            </div>
+                                            <div class="row g-2 mt-1">
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control form-control-sm internal-field" placeholder="Vendor Quote # (internal only)">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control form-control-sm internal-field" placeholder="Internal Notes (internal only)">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculation Demo -->
+            <div class="calculation-demo">
+                <h4>🧮 Live Calculation Demo</h4>
+                <p>Try editing the fields above to see real-time calculations:</p>
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>When you edit Cost or Multiplier:</strong><br>
+                        Sale Price = Cost × Multiplier<br>
+                        <code>$75.00 × 1.667 = $125.00</code>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>When you edit Sale Price:</strong><br>
+                        Multiplier = Sale Price ÷ Cost<br>
+                        <code>$125.00 ÷ $75.00 = 1.667</code>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Extended Price always:</strong><br>
+                        Extended = Quantity × Sale Price<br>
+                        <code>10 × $125.00 = $1,250.00</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Catalog Features -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">Product Catalog Integration</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Autocomplete Features:</h5>
+                            <ul>
+                                <li>Type to search by part number or manufacturer</li>
+                                <li>Use ↑↓ arrow keys to navigate suggestions</li>
+                                <li>Press Enter to select</li>
+                                <li>Auto-fills manufacturer, cost, multiplier, and sale price</li>
+                                <li>Learns new products automatically on blur</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>HTMX Implementation:</h5>
+                            <pre class="bg-light p-2"><code>&lt;input type="text" 
+  hx-get="/quotes/htmx/product-search"
+  hx-trigger="keyup changed delay:300ms"
+  hx-target="#suggestions"
+  hx-indicator=".htmx-indicator"&gt;</code></pre>
+                            <p class="text-muted small">Debounced search prevents excessive requests</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Field Types Explanation -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">Field Types & Visibility</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5>Customer-Visible Fields</h5>
+                            <ul class="list-unstyled">
+                                <li>✅ Type, Quantity, Manufacturer</li>
+                                <li>✅ Part Number</li>
+                                <li>✅ Sale Price (if enabled)</li>
+                                <li>✅ Extended Price (if enabled)</li>
+                                <li>✅ Description, Location, Lead Time</li>
+                                <li>✅ Customer Notes</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Internal-Only Fields</h5>
+                            <ul class="list-unstyled text-danger">
+                                <li>🔒 Cost</li>
+                                <li>🔒 Multiplier</li>
+                                <li>🔒 Vendor Quote Number</li>
+                                <li>🔒 Internal Notes</li>
+                                <li>🔒 Margin calculations</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Optional Fields</h5>
+                            <p class="text-muted">Can be hidden to reduce clutter:</p>
+                            <ul class="list-unstyled">
+                                <li>👁️ Description</li>
+                                <li>👁️ Customer Notes</li>
+                                <li>👁️ Lead Time</li>
+                                <li>👁️ Location</li>
+                                <li>👁️ Vendor Quote #</li>
+                                <li>👁️ Internal Notes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+    <script>
+        // Toggle optional fields demo
+        document.getElementById('toggleOptional').addEventListener('click', function() {
+            const rows = document.querySelectorAll('.optional-fields-row');
+            const btn = this;
+            rows.forEach(row => {
+                row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
+            });
+            
+            if (btn.innerHTML.includes('Show')) {
+                btn.innerHTML = '<i class="ti ti-eye-off"></i> Hide Optional Fields';
+            } else {
+                btn.innerHTML = '<i class="ti ti-eye"></i> Show Optional Fields';
+            }
+        });
+
+        // Autocomplete demo
+        const partSearch = document.getElementById('partSearch');
+        const dropdown = document.getElementById('autocompleteDropdown');
+        
+        partSearch.addEventListener('focus', function() {
+            dropdown.classList.add('show');
+        });
+        
+        partSearch.addEventListener('blur', function() {
+            setTimeout(() => dropdown.classList.remove('show'), 200);
+        });
+
+        // Calculation demo
+        function updateCalculations() {
+            const qty = parseFloat(document.getElementById('qty1').value) || 0;
+            const cost = parseFloat(document.getElementById('cost1').value.replace('$', '')) || 0;
+            const multiplier = parseFloat(document.getElementById('multiplier1').value) || 0;
+            const salePrice = cost * multiplier;
+            const extended = qty * salePrice;
+            
+            document.getElementById('salePrice1').value = `$${salePrice.toFixed(2)}`;
+            document.getElementById('extended1').value = `$${extended.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        }
+
+        document.getElementById('qty1').addEventListener('input', updateCalculations);
+        document.getElementById('cost1').addEventListener('input', updateCalculations);
+        document.getElementById('multiplier1').addEventListener('input', updateCalculations);
+    </script>
+</body>
+</html>

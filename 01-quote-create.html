@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Quote - Loome Quote Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <style>
+        /* Annotation styles */
+        .annotation {
+            position: absolute;
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .annotation::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 20px;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #ff6b6b;
+        }
+        .field-helper {
+            position: relative;
+            display: inline-block;
+        }
+        .field-helper .helper-text {
+            display: none;
+            position: absolute;
+            background: #206bc4;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            white-space: nowrap;
+            top: -40px;
+            left: 0;
+            z-index: 1001;
+        }
+        .field-helper:hover .helper-text {
+            display: block;
+        }
+        .calculation-note {
+            background: #f8f9fa;
+            border-left: 3px solid #206bc4;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 13px;
+        }
+        .version-badge {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loome Header -->
+    <header class="navbar navbar-expand-md navbar-light d-print-none">
+        <div class="container-xl">
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                <a href="#">
+                    <img src="https://via.placeholder.com/110x32/206bc4/ffffff?text=LOOME" alt="Loome" class="navbar-brand-image">
+                </a>
+            </h1>
+            <div class="navbar-nav flex-row order-md-last">
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link d-flex lh-1 text-reset p-0">
+                        <span class="avatar avatar-sm">JD</span>
+                        <div class="d-none d-xl-block ps-2">
+                            <div>Jane Doe</div>
+                            <div class="mt-1 small text-muted">Project Manager</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="page-wrapper">
+        <div class="container-xl">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="page-pretitle">
+                            Project: Acme Corp Office Renovation
+                        </div>
+                        <h2 class="page-title">
+                            Create New Quote
+                            <span class="version-badge ms-2">Version ID: Q-2501-A1B2C3</span>
+                        </h2>
+                    </div>
+                    <div class="col-auto ms-auto d-print-none">
+                        <div class="btn-list">
+                            <button class="btn btn-white">
+                                <i class="ti ti-download"></i> Save as Template
+                            </button>
+                            <button class="btn btn-primary">
+                                <i class="ti ti-device-floppy"></i> Save Quote
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row row-deck row-cards">
+                <!-- Quote Manager Section -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="ti ti-folder-plus me-2"></i>Quote Manager
+                                <span class="annotation" style="top: -35px; left: 200px;">
+                                    Create new quotes, load templates, or retrieve versions
+                                </span>
+                            </h3>
+                            <div class="card-actions">
+                                <a href="#" class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#quote-manager">
+                                    <i class="ti ti-chevron-down"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="collapse show" id="quote-manager">
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <button class="btn btn-outline-primary w-100">
+                                            <i class="ti ti-file-plus"></i> New Quote (Reset All)
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select class="form-select">
+                                            <option>Select Template...</option>
+                                            <option>Standard Package Template</option>
+                                            <option>Premium Package Template</option>
+                                            <option>Custom Lighting Template</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button class="btn btn-outline-secondary w-100">
+                                            <i class="ti ti-history"></i> Retrieve Version
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quote Information Section -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="ti ti-file-text me-2"></i>Quote Information
+                            </h3>
+                            <div class="card-actions">
+                                <a href="#" class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#quote-info">
+                                    <i class="ti ti-chevron-down"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="collapse show" id="quote-info">
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="field-helper">
+                                            <label class="form-label required">Client Name</label>
+                                            <span class="helper-text">Links to Organization in Loome</span>
+                                        </div>
+                                        <input type="text" class="form-control" value="Acme Corp" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="field-helper">
+                                            <label class="form-label required">Project Name</label>
+                                            <span class="helper-text">Must be unique per client</span>
+                                        </div>
+                                        <input type="text" class="form-control" value="Office Renovation - Phase 1" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Project Location</label>
+                                        <input type="text" class="form-control" value="123 Main St, New York, NY">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="field-helper">
+                                            <label class="form-label">Quote Number</label>
+                                            <span class="helper-text">User-defined version label</span>
+                                        </div>
+                                        <input type="text" class="form-control" value="REV-3" placeholder="e.g., REV-1, v2.0">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">ZIP Code</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" value="10001" id="zipCode">
+                                            <button class="btn btn-outline-secondary" type="button">
+                                                <i class="ti ti-map-pin"></i> Lookup Tax
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Date</label>
+                                        <input type="date" class="form-control" value="2025-01-15">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="field-helper">
+                                            <label class="form-label">Valid For</label>
+                                            <span class="helper-text">Auto-calculates expiry date</span>
+                                        </div>
+                                        <select class="form-select">
+                                            <option>7 days</option>
+                                            <option>14 days</option>
+                                            <option selected>30 days</option>
+                                            <option>60 days</option>
+                                            <option>90 days</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Quoted By</label>
+                                        <input type="text" class="form-control" value="Jane Doe">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Drawing Version</label>
+                                        <input type="text" class="form-control" placeholder="v1.2">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Line Items Section -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="ti ti-list-details me-2"></i>Line Items
+                                <span class="annotation" style="top: -35px; left: 150px;">
+                                    Dynamic product entry with auto-calculations
+                                </span>
+                            </h3>
+                            <div class="card-actions">
+                                <button class="btn btn-sm btn-outline-primary me-2">
+                                    <i class="ti ti-eye-off"></i> Hide Optional Fields
+                                </button>
+                                <button class="btn btn-sm btn-primary">
+                                    <i class="ti ti-plus"></i> Add Quote Item
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-vcenter card-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="50"></th>
+                                            <th>Type</th>
+                                            <th>Qty</th>
+                                            <th>Manufacturer</th>
+                                            <th>Part #</th>
+                                            <th class="text-danger">Cost</th>
+                                            <th class="text-danger">Multiplier</th>
+                                            <th>Sale Price</th>
+                                            <th>Extended</th>
+                                            <th width="50"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <button class="btn btn-icon btn-sm btn-ghost-primary">
+                                                    <i class="ti ti-copy"></i>
+                                                </button>
+                                            </td>
+                                            <td><input type="text" class="form-control form-control-sm" value="Fixture"></td>
+                                            <td><input type="number" class="form-control form-control-sm" value="10"></td>
+                                            <td><input type="text" class="form-control form-control-sm" value="Acme Lighting"></td>
+                                            <td>
+                                                <div class="field-helper">
+                                                    <input type="text" class="form-control form-control-sm" value="LED-PANEL-2X4">
+                                                    <span class="helper-text">Autocomplete from product catalog</span>
+                                                </div>
+                                            </td>
+                                            <td><input type="text" class="form-control form-control-sm text-danger" value="$75.00"></td>
+                                            <td><input type="text" class="form-control form-control-sm text-danger" value="1.667"></td>
+                                            <td><input type="text" class="form-control form-control-sm" value="$125.00"></td>
+                                            <td><input type="text" class="form-control form-control-sm bg-light" value="$1,250.00" readonly></td>
+                                            <td>
+                                                <button class="btn btn-icon btn-sm btn-ghost-danger">
+                                                    <i class="ti ti-x"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr class="bg-light">
+                                            <td colspan="10">
+                                                <div class="row g-2 p-2">
+                                                    <div class="col-md-4">
+                                                        <input type="text" class="form-control form-control-sm" placeholder="Description">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <input type="text" class="form-control form-control-sm" placeholder="Customer Notes">
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <input type="text" class="form-control form-control-sm" placeholder="Lead Time">
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <input type="text" class="form-control form-control-sm" placeholder="Location">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="calculation-note mx-3 mb-3">
+                                <strong>Calculation Logic:</strong><br>
+                                • Sale Price = Cost × Multiplier<br>
+                                • Extended Price = Quantity × Sale Price<br>
+                                • When Sale Price is edited: Multiplier = Sale Price ÷ Cost
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quotation Notes Section -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="ti ti-notes me-2"></i>Quotation Notes
+                            </h3>
+                            <div class="card-actions">
+                                <a href="#" class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#notes">
+                                    <i class="ti ti-chevron-down"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="collapse show" id="notes">
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Custom Notes</label>
+                                    <textarea class="form-control" rows="3" placeholder="Enter quote-specific notes..."></textarea>
+                                </div>
+                                <div>
+                                    <label class="form-label">Standard Terms & Conditions</label>
+                                    <textarea class="form-control" rows="4">1. This quotation is valid for 30 days from the date of issue.
+2. Prices are subject to change based on final specifications.
+3. Payment terms: 50% deposit upon order confirmation, balance due upon delivery.
+4. All products are covered by manufacturer warranty.</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fixed Project Summary Panel -->
+        <div class="position-fixed" style="right: 20px; top: 100px; width: 300px; z-index: 100;">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="card-title text-white">
+                        <i class="ti ti-calculator me-2"></i>Project Summary
+                    </h3>
+                    <div class="annotation" style="top: -35px; right: 0; left: auto;">
+                        Internal use only - not shown to customer
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-check">
+                            <input class="form-check-input" type="checkbox" checked>
+                            <span class="form-check-label">Show Line Item Pricing on PDF</span>
+                        </label>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Sales Tax</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" value="8.875%">
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-check">
+                            <input class="form-check-input" type="checkbox">
+                            <span class="form-check-label">Apply Tax to Freight</span>
+                        </label>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Freight</label>
+                        <div class="input-group input-group-sm">
+                            <button class="btn btn-outline-secondary btn-sm active">$</button>
+                            <button class="btn btn-outline-secondary btn-sm">%</button>
+                            <input type="text" class="form-control" value="250.00">
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <strong>$1,250.00</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Freight:</span>
+                        <span>$250.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Sales Tax:</span>
+                        <span>$110.94</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3 h5">
+                        <strong>Grand Total:</strong>
+                        <strong>$1,610.94</strong>
+                    </div>
+
+                    <hr>
+
+                    <div class="text-danger">
+                        <div class="d-flex justify-content-between mb-1 small">
+                            <span>Total Cost:</span>
+                            <span>$750.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1 small">
+                            <span>Gross Profit:</span>
+                            <span>$500.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between small">
+                            <span>Margin:</span>
+                            <strong>40.0%</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+</body>
+</html>

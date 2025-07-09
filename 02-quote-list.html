@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotes Dashboard - Loome Quote Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <style>
+        .annotation {
+            position: absolute;
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .annotation::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 20px;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #ff6b6b;
+        }
+        .status-draft { background-color: #e8f5e9; color: #2e7d32; }
+        .status-sent { background-color: #e3f2fd; color: #1976d2; }
+        .status-approved { background-color: #fce4ec; color: #c2185b; }
+        .status-ordered { background-color: #f3e5f5; color: #7b1fa2; }
+        .status-rejected { background-color: #ffebee; color: #d32f2f; }
+        .filter-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .metric-card {
+            text-align: center;
+            padding: 20px;
+        }
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .metric-label {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loome Header -->
+    <header class="navbar navbar-expand-md navbar-light d-print-none">
+        <div class="container-xl">
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                <a href="#">
+                    <img src="https://via.placeholder.com/110x32/206bc4/ffffff?text=LOOME" alt="Loome" class="navbar-brand-image">
+                </a>
+            </h1>
+            <div class="navbar-nav flex-row order-md-last">
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link d-flex lh-1 text-reset p-0">
+                        <span class="avatar avatar-sm">JD</span>
+                        <div class="d-none d-xl-block ps-2">
+                            <div>Jane Doe</div>
+                            <div class="mt-1 small text-muted">Project Manager</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="page-wrapper">
+        <div class="container-xl">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="page-pretitle">
+                            Quote Management
+                        </div>
+                        <h2 class="page-title">
+                            All Quotes
+                        </h2>
+                    </div>
+                    <div class="col-auto ms-auto d-print-none">
+                        <div class="btn-list">
+                            <button class="btn btn-white">
+                                <i class="ti ti-download"></i> Export
+                            </button>
+                            <a href="01-quote-create.html" class="btn btn-primary">
+                                <i class="ti ti-plus"></i> New Quote
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metrics Row -->
+            <div class="row row-cards mb-4">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card">
+                        <div class="card-body metric-card">
+                            <div class="metric-value text-primary">42</div>
+                            <div class="metric-label">Active Quotes</div>
+                            <span class="annotation" style="top: 10px; right: 10px;">
+                                Quotes in Draft or Sent status
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card">
+                        <div class="card-body metric-card">
+                            <div class="metric-value text-success">$1.2M</div>
+                            <div class="metric-label">Pipeline Value</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card">
+                        <div class="card-body metric-card">
+                            <div class="metric-value text-warning">68%</div>
+                            <div class="metric-label">Win Rate</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card">
+                        <div class="card-body metric-card">
+                            <div class="metric-value text-info">14</div>
+                            <div class="metric-label">Expiring Soon</div>
+                            <span class="annotation" style="top: 10px; right: 10px;">
+                                Expiring within 7 days
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filter-section">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Search</label>
+                        <input type="text" class="form-control" placeholder="Quote ID, Customer, Project...">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Status</label>
+                        <select class="form-select">
+                            <option>All Statuses</option>
+                            <option>Draft</option>
+                            <option>Sent</option>
+                            <option>Approved</option>
+                            <option>Ordered</option>
+                            <option>Rejected</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Date Range</label>
+                        <select class="form-select">
+                            <option>Last 30 days</option>
+                            <option>Last 60 days</option>
+                            <option>Last 90 days</option>
+                            <option>This Year</option>
+                            <option>All Time</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Project Manager</label>
+                        <select class="form-select">
+                            <option>All PMs</option>
+                            <option>Jane Doe</option>
+                            <option>John Smith</option>
+                            <option>Sarah Johnson</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button class="btn btn-primary me-2">
+                            <i class="ti ti-filter"></i> Apply Filters
+                        </button>
+                        <button class="btn btn-outline-secondary">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quotes Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Quote List</h3>
+                    <div class="card-actions">
+                        <span class="text-muted">Showing 1-10 of 156 quotes</span>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table card-table table-vcenter">
+                        <thead>
+                            <tr>
+                                <th>Quote ID</th>
+                                <th>Customer</th>
+                                <th>Project</th>
+                                <th>Version</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Created</th>
+                                <th>Valid Until</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <a href="03-quote-view.html" class="text-reset">Q-2501-A1B2C3</a>
+                                    <span class="annotation" style="top: -25px; left: 0;">
+                                        Auto-generated unique ID
+                                    </span>
+                                </td>
+                                <td>Acme Corp</td>
+                                <td>Office Renovation - Phase 1</td>
+                                <td>
+                                    <span class="badge bg-secondary">REV-3</span>
+                                </td>
+                                <td>
+                                    <span class="badge status-approved">Approved</span>
+                                </td>
+                                <td>$45,250.00</td>
+                                <td>Jan 15, 2025</td>
+                                <td>
+                                    <span class="text-warning">Feb 14, 2025</span>
+                                </td>
+                                <td>
+                                    <div class="btn-list flex-nowrap">
+                                        <a href="03-quote-view.html" class="btn btn-sm btn-white">View</a>
+                                        <button class="btn btn-sm btn-primary">Place Order</button>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-white dropdown-toggle" data-bs-toggle="dropdown">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="ti ti-edit me-2"></i>Edit
+                                                </a>
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="ti ti-copy me-2"></i>Duplicate
+                                                </a>
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="ti ti-file-export me-2"></i>Export PDF
+                                                </a>
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="ti ti-history me-2"></i>Version History
+                                                </a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item text-danger" href="#">
+                                                    <i class="ti ti-trash me-2"></i>Delete
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="#" class="text-reset">Q-2501-B3C4D5</a>
+                                </td>
+                                <td>TechStart Inc</td>
+                                <td>Warehouse Lighting Upgrade</td>
+                                <td>
+                                    <span class="badge bg-secondary">v1.0</span>
+                                </td>
+                                <td>
+                                    <span class="badge status-sent">Sent</span>
+                                </td>
+                                <td>$28,750.00</td>
+                                <td>Jan 14, 2025</td>
+                                <td>Feb 13, 2025</td>
+                                <td>
+                                    <div class="btn-list flex-nowrap">
+                                        <a href="#" class="btn btn-sm btn-white">View</a>
+                                        <button class="btn btn-sm btn-white" disabled>Place Order</button>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-white dropdown-toggle" data-bs-toggle="dropdown">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="#" class="text-reset">Q-2501-C5D6E7</a>
+                                </td>
+                                <td>Global Retail Co</td>
+                                <td>Store #42 Retrofit</td>
+                                <td>
+                                    <span class="badge bg-secondary">REV-2</span>
+                                    <span class="annotation" style="top: -25px; left: 50px;">
+                                        User-defined version label
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge status-draft">Draft</span>
+                                </td>
+                                <td>$12,500.00</td>
+                                <td>Jan 13, 2025</td>
+                                <td>Feb 12, 2025</td>
+                                <td>
+                                    <div class="btn-list flex-nowrap">
+                                        <a href="#" class="btn btn-sm btn-white">View</a>
+                                        <button class="btn btn-sm btn-white" disabled>Place Order</button>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-white dropdown-toggle" data-bs-toggle="dropdown">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="#" class="text-reset">Q-2501-D7E8F9</a>
+                                </td>
+                                <td>City Hospital</td>
+                                <td>Emergency Wing Lighting</td>
+                                <td>
+                                    <span class="badge bg-secondary">FINAL</span>
+                                </td>
+                                <td>
+                                    <span class="badge status-ordered">Ordered</span>
+                                </td>
+                                <td>$78,900.00</td>
+                                <td>Jan 10, 2025</td>
+                                <td>Feb 09, 2025</td>
+                                <td>
+                                    <div class="btn-list flex-nowrap">
+                                        <a href="#" class="btn btn-sm btn-white">View</a>
+                                        <button class="btn btn-sm btn-success">View Order</button>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-white dropdown-toggle" data-bs-toggle="dropdown">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="#" class="text-reset">Q-2412-F1G2H3</a>
+                                </td>
+                                <td>Metro Bank</td>
+                                <td>Branch Renovation</td>
+                                <td>
+                                    <span class="badge bg-secondary">v3.2</span>
+                                </td>
+                                <td>
+                                    <span class="badge status-rejected">Rejected</span>
+                                </td>
+                                <td>$34,200.00</td>
+                                <td>Dec 20, 2024</td>
+                                <td>
+                                    <span class="text-danger">Jan 19, 2025</span>
+                                    <span class="annotation" style="top: -25px; left: 0;">
+                                        Expired quotes shown in red
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="btn-list flex-nowrap">
+                                        <a href="#" class="btn btn-sm btn-white">View</a>
+                                        <button class="btn btn-sm btn-white">Create New Version</button>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-white dropdown-toggle" data-bs-toggle="dropdown">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer d-flex align-items-center">
+                    <p class="m-0 text-muted">Showing <span>1</span> to <span>5</span> of <span>156</span> entries</p>
+                    <ul class="pagination m-0 ms-auto">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">
+                                <i class="ti ti-chevron-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">4</a></li>
+                        <li class="page-item"><a class="page-link" href="#">5</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">
+                                <i class="ti ti-chevron-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+</body>
+</html>
