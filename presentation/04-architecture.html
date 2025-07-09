@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 4: Architecture Planning - AI-Powered Rapid Prototyping</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .header-bar {
+            background: #1a1a1a;
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .header-bar img {
+            height: 40px;
+            display: block;
+        }
+        .slide-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 40px 20px;
+        }
+        .slide-header {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .slide-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .slide-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .slide-subtitle {
+            font-size: 1.25rem;
+            color: #6c757d;
+        }
+        .content-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .architecture-diagram {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .claude-chat {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .chat-message {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .chat-avatar.joe {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        .chat-avatar.claude {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .chat-content {
+            flex-grow: 1;
+        }
+        .chat-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #495057;
+        }
+        .chat-text {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+        .decision-card {
+            background: #e3f2fd;
+            border: 2px solid #1976d2;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .decision-card h4 {
+            color: #1565c0;
+            margin-bottom: 15px;
+        }
+        .architecture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .arch-component {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .arch-component h5 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .code-snippet {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .integration-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background: #fff3e0;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .integration-step {
+            text-align: center;
+            flex: 1;
+        }
+        .integration-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: #ff9800;
+        }
+        .comparison-table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .benefit-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .benefit-item {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .benefit-icon {
+            color: #2e7d32;
+            font-size: 1.5rem;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+        }
+        .nav-btn {
+            padding: 12px 24px;
+            background: #206bc4;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .nav-btn:hover {
+            background: #1c5aa0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(32, 107, 196, 0.3);
+        }
+        .nav-btn.prev {
+            background: #6c757d;
+        }
+        .nav-btn.prev:hover {
+            background: #5a6268;
+        }
+        .timeline-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #dee2e6;
+            transition: all 0.3s;
+        }
+        .timeline-dot.active {
+            background: #667eea;
+            transform: scale(1.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="header-bar">
+        <img src="../logo.png" alt="Logo">
+    </div>    <div class="slide-container">
+        <!-- Slide Header -->
+        <div class="slide-header">
+            <span class="slide-number">Step 4 of 6</span>
+            <h1 class="slide-title">Architecture Planning with AI</h1>
+            <p class="slide-subtitle">Claude designs the integration strategy for implementing the quote system in Loome ERP</p>
+        </div>
+
+        <!-- The Challenge -->
+        <div class="content-section">
+            <h2>The Integration Challenge</h2>
+            <div class="claude-chat">
+                <div class="chat-message">
+                    <div class="chat-avatar joe">JP</div>
+                    <div class="chat-content">
+                        <div class="chat-name">Joe</div>
+                        <div class="chat-text">
+                            I need to implement this quote functionality in our Loome ERP system. Here's the challenge:
+                            <ul style="margin: 10px 0;">
+                                <li>Loome already has a quote system that syncs from Google Sheets</li>
+                                <li>We use Django, HTMX, and Tabler.io for the UI</li>
+                                <li>Need to integrate with existing Projects, Finance, and Supply Chain modules</li>
+                                <li>Must convert approved quotes to Magento orders</li>
+                            </ul>
+                            What's the best architecture approach?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-message">
+                    <div class="chat-avatar claude">AI</div>
+                    <div class="chat-content">
+                        <div class="chat-name">Claude</div>
+                        <div class="chat-text">
+                            After analyzing your existing system, I recommend creating a new Django app called 'quotes' that runs parallel to your existing quote system. This allows gradual migration without disrupting current workflows...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Architecture Decision -->
+        <div class="content-section">
+            <h2>Key Architecture Decision</h2>
+            
+            <div class="decision-card">
+                <h4>🏗️ Recommended Approach: Separate 'quotes' Django App</h4>
+                <p>Claude analyzed the existing codebase and recommended a clean separation strategy:</p>
+                <ul>
+                    <li><strong>New App:</strong> Create src/apps/quotes/ for modern quote management</li>
+                    <li><strong>Coexistence:</strong> Keep existing Google Sheets integration intact</li>
+                    <li><strong>Clean Handoff:</strong> Convert approved quotes to legacy format for orders</li>
+                    <li><strong>Zero Risk:</strong> No changes to existing quote/order workflow</li>
+                </ul>
+            </div>
+
+            <div class="architecture-diagram">
+                <h4>System Architecture</h4>
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxyZWN0IHg9IjUwIiB5PSI1MCIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiM2NjdlZWEiIHJ4PSI4Ii8+CiAgICA8dGV4dCB4PSIxNTAiIHk9IjEwNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTgiPk5ldyBRdW90ZXMgQXBwPC90ZXh0PgogICAgCiAgICA8cmVjdCB4PSI1NTAiIHk9IjUwIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzk1YTVhNiIgcng9IjgiLz4KICAgIDx0ZXh0IHg9IjY1MCIgeT0iMTA1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxOCI+TGVnYWN5IFF1b3RlczwvdGV4dD4KICAgIAogICAgPHJlY3QgeD0iMzAwIiB5PSIyNTAiIHdpZHRoPSIyMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMjhhNzQ1IiByeD0iOCIvPgogICAgPHRleHQgeD0iNDAwIiB5PSIzMDUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIiBmb250LXNpemU9IjE4Ij5PcmRlciBQbGFjZW1lbnQ8L3RleHQ+CiAgICAKICAgIDxwYXRoIGQ9Ik0xNTAgMTUwIEw0MDAgMjUwIiBzdHJva2U9IiM2NjdlZWEiIHN0cm9rZS13aWR0aD0iMyIgZmlsbD0ibm9uZSIgbWFya2VyLWVuZD0idXJsKCNhcnJvdykiLz4KICAgIDxwYXRoIGQ9Ik02NTAgMTUwIEw0MDAgMjUwIiBzdHJva2U9IiM5NWE1YTYiIHN0cm9rZS13aWR0aD0iMyIgZmlsbD0ibm9uZSIgbWFya2VyLWVuZD0idXJsKCNhcnJvdykiLz4KICAgIAogICAgPGRlZnM+CiAgICAgICAgPG1hcmtlciBpZD0iYXJyb3ciIG1hcmtlcldpZHRoPSIxMCIgbWFya2VySGVpZ2h0PSIxMCIgcmVmWD0iOSIgcmVmWT0iMyIgb3JpZW50PSJhdXRvIiBtYXJrZXJVbml0cz0ic3Ryb2tlV2lkdGgiPgogICAgICAgICAgICA8cGF0aCBkPSJNMCwwIEw5LDMgTDAsNiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiLz4KICAgICAgICA8L21hcmtlcj4KICAgIDwvZGVmcz4KPC9zdmc+" alt="Architecture Diagram" style="max-width: 100%;">
+            </div>
+        </div>
+
+        <!-- Implementation Plan -->
+        <div class="content-section">
+            <h2>Implementation Architecture</h2>
+            
+            <div class="architecture-grid">
+                <div class="arch-component">
+                    <h5>📁 App Structure</h5>
+                    <div class="code-snippet">src/apps/quotes/
+├── models/
+│   ├── quote.py
+│   ├── line_item.py
+│   └── template.py
+├── views/
+│   ├── quote.py
+│   └── htmx.py
+├── services/
+│   ├── calculations.py
+│   └── order.py
+└── templates/quotes/</div>
+                </div>
+                
+                <div class="arch-component">
+                    <h5>🗄️ Data Models</h5>
+                    <ul style="margin: 0; padding-left: 20px;">
+                        <li>ModernQuote (versioning)</li>
+                        <li>QuoteLineItem (products)</li>
+                        <li>QuoteTemplate (reusable)</li>
+                        <li>ProductCatalog (cache)</li>
+                    </ul>
+                    <p style="margin-top: 10px; color: #6c757d; font-size: 14px;">Separate from legacy Quote model</p>
+                </div>
+                
+                <div class="arch-component">
+                    <h5>🔗 Integration Points</h5>
+                    <ul style="margin: 0; padding-left: 20px;">
+                        <li>Projects → Quote linking</li>
+                        <li>Organization → Customers</li>
+                        <li>Finance → Tax & Invoicing</li>
+                        <li>Supply Chain → Products</li>
+                    </ul>
+                    <p style="margin-top: 10px; color: #6c757d; font-size: 14px;">Uses existing relationships</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Architecture Decisions -->
+        <div class="content-section">
+            <h2>Additional Key Design Decisions</h2>
+            
+            <div class="architecture-grid">
+                <div class="arch-component">
+                    <h5>🔐 Permission Model</h5>
+                    <ul style="margin: 0; padding-left: 20px;">
+                        <li>Role-based access control</li>
+                        <li>Sales can view/edit own quotes</li>
+                        <li>Managers approve high-value quotes</li>
+                        <li>Finance sees all approved quotes</li>
+                    </ul>
+                    <p style="margin-top: 10px; color: #6c757d; font-size: 14px;">Leverages Django's built-in auth</p>
+                </div>
+                
+                <div class="arch-component">
+                    <h5>🚀 Performance Strategy</h5>
+                    <ul style="margin: 0; padding-left: 20px;">
+                        <li>Redis caching for product catalog</li>
+                        <li>Lazy-loading for line items</li>
+                        <li>Background jobs for PDF generation</li>
+                        <li>Database indexing on quote IDs</li>
+                    </ul>
+                    <p style="margin-top: 10px; color: #6c757d; font-size: 14px;">Optimized for 10k+ quotes</p>
+                </div>
+                
+                <div class="arch-component">
+                    <h5>🎯 API Design</h5>
+                    <ul style="margin: 0; padding-left: 20px;">
+                        <li>RESTful endpoints for CRUD</li>
+                        <li>HTMX partials for dynamic UI</li>
+                        <li>Webhook support for events</li>
+                        <li>GraphQL for complex queries</li>
+                    </ul>
+                    <p style="margin-top: 10px; color: #6c757d; font-size: 14px;">Future-ready architecture</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <h4 style="color: #2c3e50; margin-bottom: 20px;">🏗️ Technical Stack Decisions</h4>
+                <div class="decision-card" style="background: #f8f9fa;">
+                    <ul style="margin: 0; padding-left: 20px;">
+                        <li><strong>Frontend:</strong> HTMX + Alpine.js for reactivity (matches Loome's existing patterns)</li>
+                        <li><strong>Styling:</strong> Tabler.io components with custom theme variables</li>
+                        <li><strong>Search:</strong> PostgreSQL full-text search with trigram similarity</li>
+                        <li><strong>File Storage:</strong> S3-compatible storage for PDF quotes</li>
+                        <li><strong>Background Tasks:</strong> Celery for async operations</li>
+                        <li><strong>Testing:</strong> pytest with factory_boy for test data</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Integration -->
+        <div class="content-section">
+            <h2>Order Placement Integration Options</h2>
+            <p style="color: #6c757d; margin-bottom: 20px;">Claude presented two possible integration approaches:</p>
+            
+            <h4 style="margin-top: 30px; margin-bottom: 20px;">Option 1: Legacy Transformation Approach</h4>
+            <div class="integration-flow">
+                <div class="integration-step">
+                    <div class="integration-icon">📝</div>
+                    <strong>Modern Quote</strong>
+                    <p style="font-size: 14px; color: #6c757d;">New data structure</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="integration-step">
+                    <div class="integration-icon">🔄</div>
+                    <strong>Transform</strong>
+                    <p style="font-size: 14px; color: #6c757d;">Convert to legacy</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="integration-step">
+                    <div class="integration-icon">📦</div>
+                    <strong>Legacy Quote</strong>
+                    <p style="font-size: 14px; color: #6c757d;">Existing format</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="integration-step">
+                    <div class="integration-icon">🛒</div>
+                    <strong>Magento Order</strong>
+                    <p style="font-size: 14px; color: #6c757d;">No changes needed</p>
+                </div>
+            </div>
+
+            <div class="code-snippet">
+def convert_quote_to_order_data(modern_quote):
+    """Transform ModernQuote to legacy format for order placement"""
+    return {
+        'parsed_data': {
+            'header': {
+                'subtotal': float(modern_quote.subtotal),
+                'tax_amount': float(modern_quote.tax_amount),
+                'shipping_amount': float(modern_quote.get_shipping_amount()),
+                'grand_total': float(modern_quote.total),
+            },
+            'products': [transform_line_item(item) for item in modern_quote.line_items.all()]
+        }
+    }</div>
+
+            <h4 style="margin-top: 40px; margin-bottom: 20px;">Option 2: Direct Service Approach <span style="background: #28a745; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; margin-left: 10px;">Cleaner Code</span></h4>
+            <div class="integration-flow" style="background: #e8f5e9;">
+                <div class="integration-step">
+                    <div class="integration-icon">📝</div>
+                    <strong>Modern Quote</strong>
+                    <p style="font-size: 14px; color: #6c757d;">New data structure</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="integration-step" style="grid-column: span 2;">
+                    <div class="integration-icon">🚀</div>
+                    <strong>New Order Service</strong>
+                    <p style="font-size: 14px; color: #6c757d;">Direct Magento API</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="integration-step">
+                    <div class="integration-icon">🛒</div>
+                    <strong>Magento Order</strong>
+                    <p style="font-size: 14px; color: #6c757d;">Clean integration</p>
+                </div>
+            </div>
+
+            <div class="code-snippet">
+class MagentoOrderService:
+    """Direct integration with Magento API - cleaner approach"""
+    
+    def create_order_from_quote(self, modern_quote):
+        return self.magento_api.create_order({
+            'customer_id': modern_quote.customer.magento_id,
+            'items': [self._format_item(item) for item in modern_quote.line_items.all()],
+            'totals': {
+                'subtotal': modern_quote.subtotal,
+                'tax': modern_quote.tax_amount,
+                'shipping': modern_quote.shipping_amount,
+                'grand_total': modern_quote.total
+            }
+        })</div>
+
+            <div style="margin-top: 30px; background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                <h5 style="color: #2c3e50; margin-bottom: 15px;">🤔 Comparison</h5>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <strong style="color: #495057;">Option 1 Benefits:</strong>
+                        <ul style="margin: 10px 0; padding-left: 20px;">
+                            <li>Zero risk - uses existing flow</li>
+                            <li>No changes to order process</li>
+                            <li>Quick to implement</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong style="color: #495057;">Option 2 Benefits:</strong>
+                        <ul style="margin: 10px 0; padding-left: 20px;">
+                            <li>Cleaner, more maintainable code</li>
+                            <li>Direct API integration</li>
+                            <li>Better error handling</li>
+                            <li>Future-proof architecture</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Migration Strategy -->
+        <div class="content-section">
+            <h2>Migration Strategy</h2>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Action</th>
+                        <th>Risk Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Phase 1:</strong> Parallel Operation</td>
+                        <td>Deploy new quotes app alongside existing system</td>
+                        <td style="color: #2e7d32;">✓ Zero Risk</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phase 2:</strong> Pilot Projects</td>
+                        <td>Select teams use new system, others continue with sheets</td>
+                        <td style="color: #2e7d32;">✓ Low Risk</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phase 3:</strong> Gradual Adoption</td>
+                        <td>Default new projects to modern quotes</td>
+                        <td style="color: #ff9800;">⚠ Managed Risk</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phase 4:</strong> Full Migration</td>
+                        <td>Disable Google Sheets sync, archive legacy system</td>
+                        <td style="color: #ff9800;">⚠ Planned Cutover</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Benefits -->
+        <div class="content-section">
+            <h2>Architecture Benefits</h2>
+            
+            <div class="benefit-list">
+                <div class="benefit-item">
+                    <span class="benefit-icon">✅</span>
+                    <span>No disruption to existing workflows</span>
+                </div>
+                <div class="benefit-item">
+                    <span class="benefit-icon">✅</span>
+                    <span>Clean separation of concerns</span>
+                </div>
+                <div class="benefit-item">
+                    <span class="benefit-icon">✅</span>
+                    <span>Gradual migration path</span>
+                </div>
+                <div class="benefit-item">
+                    <span class="benefit-icon">✅</span>
+                    <span>Preserves all integrations</span>
+                </div>
+                <div class="benefit-item">
+                    <span class="benefit-icon">✅</span>
+                    <span>Easy rollback if needed</span>
+                </div>
+                <div class="benefit-item">
+                    <span class="benefit-icon">✅</span>
+                    <span>Future-proof design</span>
+                </div>
+            </div>
+
+            <div style="background: #e8f5e9; padding: 25px; border-radius: 8px; margin-top: 30px;">
+                <h4 style="color: #2e7d32; margin-bottom: 15px;">💡 Claude's Key Insight</h4>
+                <p style="margin: 0; font-size: 1.1rem;">"By creating a new app instead of modifying the existing system, you eliminate risk while providing a clear upgrade path. The transformation layer ensures compatibility without coupling the systems together."</p>
+            </div>
+        </div>
+
+        <!-- Timeline Indicator -->
+        <div class="timeline-indicator">
+            <div class="timeline-dot"></div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-dot active"></div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-dot"></div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <a href="03-requirements.html" class="nav-btn prev">← Previous: Requirements</a>
+            <a href="05-mockups.html" class="nav-btn">Next: Professional Mockups →</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+</body>
+</html>

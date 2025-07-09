@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 1: Billy Creates Prototype - AI-Powered Rapid Prototyping</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header-bar {
+            background: #1a1a1a;
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .header-bar img {
+            height: 40px;
+            display: block;
+        }
+        .slide-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 40px 20px;
+        }
+        .slide-header {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .slide-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .slide-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .slide-subtitle {
+            font-size: 1.25rem;
+            color: #6c757d;
+        }
+        .content-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .persona-card {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        .persona-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            flex-shrink: 0;
+        }
+        .persona-info h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .chat-demo {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .chat-message {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .chat-avatar.user {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        .chat-avatar.ai {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        .chat-content {
+            flex-grow: 1;
+        }
+        .chat-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #495057;
+        }
+        .chat-text {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+        .code-snippet {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .highlight-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .highlight-box h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        .screenshot-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .screenshot {
+            max-width: 100%;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+        }
+        .nav-btn {
+            padding: 12px 24px;
+            background: #206bc4;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .nav-btn:hover {
+            background: #1c5aa0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(32, 107, 196, 0.3);
+        }
+        .nav-btn.prev {
+            background: #6c757d;
+        }
+        .nav-btn.prev:hover {
+            background: #5a6268;
+        }
+        .timeline-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #dee2e6;
+            transition: all 0.3s;
+        }
+        .timeline-dot.active {
+            background: #667eea;
+            transform: scale(1.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="header-bar">
+        <img src="../logo.png" alt="Logo">
+    </div>
+    <div class="slide-container">
+        <!-- Slide Header -->
+        <div class="slide-header">
+            <span class="slide-number">Step 1 of 6</span>
+            <h1 class="slide-title">Billy Creates a Working Prototype</h1>
+            <p class="slide-subtitle">How a project manager with zero coding experience built a functional React application</p>
+        </div>
+
+        <!-- Billy's Persona -->
+        <div class="content-section">
+            <h2 style="margin-bottom: 30px;">Meet Billy</h2>
+            <div class="persona-card">
+                <div class="persona-avatar">👔</div>
+                <div class="persona-info">
+                    <h3>Billy Marchetti - Project Manager by trade, Alter-ego: Badass prototyper</h3>
+                    <p style="color: #6c757d; margin-bottom: 15px;">5 years experience in business analysis • No programming background</p>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <span style="background: #e3f2fd; color: #1976d2; padding: 5px 15px; border-radius: 20px; font-size: 14px;">
+                            Excel Expert
+                        </span>
+                        <span style="background: #e8f5e9; color: #388e3c; padding: 5px 15px; border-radius: 20px; font-size: 14px;">
+                            Process Mapping
+                        </span>
+                        <span style="background: #fff3e0; color: #f57c00; padding: 5px 15px; border-radius: 20px; font-size: 14px;">
+                            Requirements Gathering
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h4>🎯 The Challenge</h4>
+                <p>Billy needed to create a quote management system for the sales team. Traditional approach would require:</p>
+                <ul>
+                    <li>Writing detailed requirements documents</li>
+                    <li>Creating wireframes and mockups</li>
+                    <li>Multiple review cycles with developers</li>
+                    <li>Weeks of back-and-forth communication</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- AI Conversation Demo -->
+        <div class="content-section">
+            <h2>The AI Conversation</h2>
+            <p style="color: #6c757d; margin-bottom: 20px;">Billy's actual conversation with Claude to build the prototype:</p>
+
+            <div class="chat-demo">
+                <div class="chat-message">
+                    <div class="chat-avatar user">BT</div>
+                    <div class="chat-content">
+                        <div class="chat-name">Billy</div>
+                        <div class="chat-text">
+                            I need to create a quote management app for our sales team. It should:
+                            <ul style="margin: 10px 0;">
+                                <li>Track customer quotes with version history</li>
+                                <li>Calculate pricing with cost, multiplier, and sale price</li>
+                                <li>Show margins but keep them internal only</li>
+                                <li>Auto-generate quote IDs like Q-2501-ABC123</li>
+                            </ul>
+                            Can you help me build this as a React app?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-message">
+                    <div class="chat-avatar ai">AI</div>
+                    <div class="chat-content">
+                        <div class="chat-name">Claude</div>
+                        <div class="chat-text">
+                            I'll help you create a complete quote management app. Let me build this step by step with all the features you need...
+                            <div class="code-snippet">
+// Quote ID generation
+const generateQuoteId = () => {
+  const date = new Date();
+  const year = date.getFullYear().toString().slice(-2);
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const random = Math.random().toString(36).substring(2, 8).toUpperCase();
+  return `Q-${year}${month}-${random}`;
+};
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-message">
+                    <div class="chat-avatar user">BT</div>
+                    <div class="chat-content">
+                        <div class="chat-name">Billy</div>
+                        <div class="chat-text">
+                            Great! Also, when someone changes the sale price, it should automatically recalculate the multiplier. And we need to save quotes in the browser so they persist.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div class="content-section">
+            <h2>The Results</h2>
+            
+            <div class="screenshot-container">
+                <img src="../billy-prototype/index.html" alt="Billy's Prototype" class="screenshot" style="height: 400px; object-fit: cover; object-position: top;">
+                <p style="color: #6c757d; margin-top: 10px;">Billy's working prototype - built in 2 hours with AI assistance</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px;">
+                <div style="background: #e3f2fd; padding: 20px; border-radius: 8px;">
+                    <h4 style="color: #1565c0; margin-bottom: 10px;">✅ What Billy Built</h4>
+                    <ul style="margin: 0; padding-left: 20px;">
+                        <li>Fully functional React app</li>
+                        <li>Real-time calculations</li>
+                        <li>Data persistence</li>
+                        <li>Version management</li>
+                        <li>Professional UI</li>
+                    </ul>
+                </div>
+                <div style="background: #e8f5e9; padding: 20px; border-radius: 8px;">
+                    <h4 style="color: #2e7d32; margin-bottom: 10px;">💡 Key Insights</h4>
+                    <ul style="margin: 0; padding-left: 20px;">
+                        <li>No coding experience needed</li>
+                        <li>Built in hours, not weeks</li>
+                        <li>Working demo > documents</li>
+                        <li>Immediate user feedback</li>
+                        <li>All logic implemented</li>
+                    </ul>
+                </div>
+                <div style="background: #fff3e0; padding: 20px; border-radius: 8px;">
+                    <h4 style="color: #e65100; margin-bottom: 10px;">🚀 Business Value</h4>
+                    <ul style="margin: 0; padding-left: 20px;">
+                        <li>Faster time to market</li>
+                        <li>Better requirements clarity</li>
+                        <li>Reduced miscommunication</li>
+                        <li>Empowered business users</li>
+                        <li>Validated before dev starts</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline Indicator -->
+        <div class="timeline-indicator">
+            <div class="timeline-dot active"></div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-dot"></div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <a href="index.html" class="nav-btn prev">← Back to Overview</a>
+            <a href="../billy-prototype/index.html" class="nav-btn" style="background: #28a745;">View Billy's Prototype →</a>
+            <a href="02-handoff.html" class="nav-btn">Next: Handoff to Joe →</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 3: Requirements Extraction - AI-Powered Rapid Prototyping</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header-bar {
+            background: #1a1a1a;
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .header-bar img {
+            height: 40px;
+            display: block;
+        }
+        .slide-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 40px 20px;
+        }
+        .slide-header {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .slide-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .slide-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .slide-subtitle {
+            font-size: 1.25rem;
+            color: #6c757d;
+        }
+        .content-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .claude-chat {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .chat-message {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .chat-avatar.joe {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        .chat-avatar.claude {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .chat-content {
+            flex-grow: 1;
+        }
+        .chat-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #495057;
+        }
+        .chat-text {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .requirement-card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+        .requirement-card h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .extracted-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .extracted-item {
+            background: white;
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .extracted-item h5 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .extracted-item ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .extracted-item li {
+            margin-bottom: 8px;
+            color: #495057;
+        }
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        .process-step {
+            text-align: center;
+            flex: 1;
+        }
+        .process-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 15px;
+        }
+        .process-arrow {
+            font-size: 2rem;
+            color: #667eea;
+        }
+        .highlight-box {
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+        }
+        .nav-btn {
+            padding: 12px 24px;
+            background: #206bc4;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .nav-btn:hover {
+            background: #1c5aa0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(32, 107, 196, 0.3);
+        }
+        .nav-btn.prev {
+            background: #6c757d;
+        }
+        .nav-btn.prev:hover {
+            background: #5a6268;
+        }
+        .timeline-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #dee2e6;
+            transition: all 0.3s;
+        }
+        .timeline-dot.active {
+            background: #667eea;
+            transform: scale(1.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="header-bar">
+        <img src="../logo.png" alt="Logo">
+    </div>
+    <div class="slide-container">
+        <!-- Slide Header -->
+        <div class="slide-header">
+            <span class="slide-number">Step 3 of 6</span>
+            <h1 class="slide-title">AI-Powered Requirements Extraction</h1>
+            <p class="slide-subtitle">Joe uses Claude to analyze Billy's prototype and extract comprehensive business requirements</p>
+        </div>
+
+        <!-- The Process -->
+        <div class="content-section">
+            <h2>The Extraction Process</h2>
+            <div class="process-flow">
+                <div class="process-step">
+                    <div class="process-icon">📱</div>
+                    <h4>Import Prototype</h4>
+                    <p style="color: #6c757d;">Joe loads Billy's code into Claude project</p>
+                </div>
+                <div class="process-arrow">→</div>
+                <div class="process-step">
+                    <div class="process-icon">🔍</div>
+                    <h4>Analyze Code</h4>
+                    <p style="color: #6c757d;">Claude examines all components and logic</p>
+                </div>
+                <div class="process-arrow">→</div>
+                <div class="process-step">
+                    <div class="process-icon">📋</div>
+                    <h4>Extract Requirements</h4>
+                    <p style="color: #6c757d;">Comprehensive documentation generated</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Claude Conversation -->
+        <div class="content-section">
+            <h2>Joe's Conversation with Claude</h2>
+            <div class="claude-chat">
+                <div class="chat-message">
+                    <div class="chat-avatar joe">JP</div>
+                    <div class="chat-content">
+                        <div class="chat-name">Joe</div>
+                        <div class="chat-text">
+                            I have a React prototype built by our business analyst. Can you analyze it and extract all the business requirements and functionality? Focus on:
+                            <ul style="margin: 10px 0;">
+                                <li>Quote version management logic</li>
+                                <li>Calculation rules and formulas</li>
+                                <li>Data structures and fields</li>
+                                <li>Business rules and validations</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-message">
+                    <div class="chat-avatar claude">AI</div>
+                    <div class="chat-content">
+                        <div class="chat-name">Claude</div>
+                        <div class="chat-text">
+                            I'll analyze the prototype comprehensively. Let me examine the code and extract all key requirements...
+                            
+                            <div style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                                <strong>🔍 Analyzing: App.jsx</strong><br>
+                                Found quote version management system with unique ID generation...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Extracted Requirements -->
+        <div class="content-section">
+            <h2>Extracted Requirements</h2>
+            <p style="color: #6c757d; margin-bottom: 20px;">Claude identified and documented these key features:</p>
+
+            <div class="requirement-card">
+                <h4>1. Quote Version Management</h4>
+                <div class="code-block">
+// Version ID Format: Q-yymm-xxxxxx
+generateVersionId() {
+  const year = date.getFullYear().toString().slice(-2);
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const random = generateRandomString(6); // Alternating consonants/digits
+  return `Q-${year}${month}-${random}`;
+}</div>
+                <ul style="margin-top: 15px;">
+                    <li>Automatic version tracking on any change</li>
+                    <li>Storage key: "${customer} - ${project} - Quote"</li>
+                    <li>Duplicate prevention when no changes detected</li>
+                </ul>
+            </div>
+
+            <div class="requirement-card">
+                <h4>2. Pricing Calculations</h4>
+                <div class="extracted-list">
+                    <div class="extracted-item">
+                        <h5>Auto-Calculation Rules</h5>
+                        <ul>
+                            <li>Sale Price = Cost × Multiplier</li>
+                            <li>When Sale Price edited: Multiplier = Sale Price ÷ Cost</li>
+                            <li>Extended Price = Quantity × Sale Price</li>
+                            <li>Subtotal = Sum of all Extended Prices</li>
+                        </ul>
+                    </div>
+                    <div class="extracted-item">
+                        <h5>Tax & Freight Logic</h5>
+                        <ul>
+                            <li>Tax applied to subtotal (configurable for freight)</li>
+                            <li>Freight as % of subtotal OR fixed amount</li>
+                            <li>Tax rate with 3 decimal precision</li>
+                            <li>Grand Total = Subtotal + Tax + Freight</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="requirement-card">
+                <h4>3. Data Structure</h4>
+                <div class="extracted-list">
+                    <div class="extracted-item">
+                        <h5>Quote Header Fields</h5>
+                        <ul>
+                            <li>clientName (required)</li>
+                            <li>projectName (required)</li>
+                            <li>projectLocation</li>
+                            <li>quoteNumber (version label)</li>
+                            <li>date & daysValid</li>
+                            <li>quotedBy</li>
+                            <li>zipCode (for tax lookup)</li>
+                        </ul>
+                    </div>
+                    <div class="extracted-item">
+                        <h5>Line Item Fields</h5>
+                        <ul>
+                            <li>Required: type, quantity, manufacturer, partNumber</li>
+                            <li>Internal: cost, multiplier (red fields)</li>
+                            <li>Customer-facing: salePrice, extendedPrice</li>
+                            <li>Optional: description, notes, leadTime</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Benefits Realized -->
+        <div class="content-section">
+            <h2>The Power of AI Extraction</h2>
+            
+            <div class="highlight-box">
+                <h4>🎯 What Joe Discovered</h4>
+                <p>Claude found 47 distinct business rules and requirements from the prototype code - many that weren't explicitly documented anywhere!</p>
+            </div>
+
+            <div class="extracted-list" style="margin-top: 30px;">
+                <div class="extracted-item">
+                    <h5>⚡ Speed</h5>
+                    <p>Complete requirements extracted in 5 minutes vs weeks of analysis</p>
+                </div>
+                <div class="extracted-item">
+                    <h5>🔍 Completeness</h5>
+                    <p>Every calculation, validation, and edge case documented</p>
+                </div>
+                <div class="extracted-item">
+                    <h5>📊 Accuracy</h5>
+                    <p>No interpretation errors - requirements come from working code</p>
+                </div>
+            </div>
+
+            <div style="background: #e8f5e9; padding: 25px; border-radius: 8px; margin-top: 20px;">
+                <h4 style="color: #2e7d32; margin-bottom: 15px;">💡 Key Insight</h4>
+                <p style="margin: 0; font-size: 1.1rem;">"The AI didn't just list features - it understood the business intent behind each piece of code and documented the 'why' along with the 'what'."</p>
+                <p style="margin: 10px 0 0 0; font-style: italic; color: #558b2f;">- Joe Petrini</p>
+            </div>
+        </div>
+
+        <!-- Timeline Indicator -->
+        <div class="timeline-indicator">
+            <div class="timeline-dot"></div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-dot active"></div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-dot"></div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <a href="02-handoff.html" class="nav-btn prev">← Previous: The Handoff</a>
+            <a href="04-architecture.html" class="nav-btn">Next: Architecture Planning →</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+</body>
+</html>

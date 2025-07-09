@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 5: Professional Mockups - AI-Powered Rapid Prototyping</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .header-bar {
+            background: #1a1a1a;
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .header-bar img {
+            height: 40px;
+            display: block;
+        }
+        .slide-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 40px 20px;
+        }
+        .slide-header {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .slide-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .slide-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .slide-subtitle {
+            font-size: 1.25rem;
+            color: #6c757d;
+        }
+        .content-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .claude-prompt {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .prompt-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .prompt-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        .prompt-text {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .mockup-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        .mockup-card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .mockup-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .mockup-preview {
+            height: 200px;
+            background: #f8f9fa;
+            position: relative;
+            overflow: hidden;
+        }
+        .mockup-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+        }
+        .mockup-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .mockup-info {
+            padding: 20px;
+        }
+        .mockup-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .mockup-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .feature-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+        .annotation-demo {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        .annotation-demo::before {
+            content: '🔍 Annotation Example';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #ff9800;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .comparison-side {
+            text-align: center;
+        }
+        .comparison-side h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .comparison-image {
+            width: 100%;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .feature-list {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .feature-list h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .feature-item {
+            display: flex;
+            align-items: start;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .feature-icon {
+            color: #28a745;
+            font-size: 1.2rem;
+            margin-top: 2px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+        }
+        .nav-btn {
+            padding: 12px 24px;
+            background: #206bc4;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .nav-btn:hover {
+            background: #1c5aa0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(32, 107, 196, 0.3);
+        }
+        .nav-btn.prev {
+            background: #6c757d;
+        }
+        .nav-btn.prev:hover {
+            background: #5a6268;
+        }
+        .nav-btn.view-all {
+            background: #28a745;
+        }
+        .nav-btn.view-all:hover {
+            background: #218838;
+        }
+        .timeline-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #dee2e6;
+            transition: all 0.3s;
+        }
+        .timeline-dot.active {
+            background: #667eea;
+            transform: scale(1.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="header-bar">
+        <img src="../logo.png" alt="Logo">
+    </div>    <div class="slide-container">
+        <!-- Slide Header -->
+        <div class="slide-header">
+            <span class="slide-number">Step 5 of 6</span>
+            <h1 class="slide-title">AI-Generated Professional Mockups</h1>
+            <p class="slide-subtitle">Claude creates production-ready mockups with annotations and documentation</p>
+        </div>
+
+        <!-- The Request -->
+        <div class="content-section">
+            <h2>Joe's Mockup Request</h2>
+            <div class="claude-prompt">
+                <div class="prompt-header">
+                    <div class="prompt-icon">JP</div>
+                    <strong>Joe's Prompt to Claude:</strong>
+                </div>
+                <div class="prompt-text">
+I need to present this quote app to my project owner. Create mockups for each page showing how it would look in our Loome application using Tabler.io styling.
+
+Important: Add red annotations and overlays that explain:
+- What fields are for and how they're calculated
+- Which fields are internal vs customer-facing
+- Business rules and validations
+- How the autocomplete works
+
+Make it so my product owner understands everything without needing to ask questions.
+                </div>
+            </div>
+        </div>
+
+        <!-- Mockup Gallery -->
+        <div class="content-section">
+            <h2>Generated Mockups</h2>
+            <p style="color: #6c757d; margin-bottom: 20px;">Claude created 8 comprehensive mockups with full annotations:</p>
+
+            <div class="mockup-gallery">
+                <div class="mockup-card">
+                    <div class="mockup-preview">
+                        <img src="../loome-mockups/01-quote-create.html" alt="Quote Create">
+                        <span class="mockup-badge">With Annotations</span>
+                    </div>
+                    <div class="mockup-info">
+                        <h4 class="mockup-title">Quote Creation Interface</h4>
+                        <p style="color: #6c757d; font-size: 14px;">Main form with all sections and real-time calculations</p>
+                        <div class="mockup-features">
+                            <span class="feature-tag">Version ID Logic</span>
+                            <span class="feature-tag">Collapsible Sections</span>
+                            <span class="feature-tag">Field Requirements</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mockup-card">
+                    <div class="mockup-preview">
+                        <img src="../loome-mockups/04-line-item-grid.html" alt="Line Items">
+                        <span class="mockup-badge">Interactive Demo</span>
+                    </div>
+                    <div class="mockup-info">
+                        <h4 class="mockup-title">Line Item Management</h4>
+                        <p style="color: #6c757d; font-size: 14px;">Dynamic grid with calculation examples</p>
+                        <div class="mockup-features">
+                            <span class="feature-tag">Auto-calculations</span>
+                            <span class="feature-tag">Product Search</span>
+                            <span class="feature-tag">Field Types</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mockup-card">
+                    <div class="mockup-preview">
+                        <img src="../loome-mockups/07-quote-approval.html" alt="Approval">
+                        <span class="mockup-badge">Workflow Demo</span>
+                    </div>
+                    <div class="mockup-info">
+                        <h4 class="mockup-title">Approval Workflow</h4>
+                        <p style="color: #6c757d; font-size: 14px;">Validation checks and business rules</p>
+                        <div class="mockup-features">
+                            <span class="feature-tag">Credit Checks</span>
+                            <span class="feature-tag">Validation Rules</span>
+                            <span class="feature-tag">Approval Flow</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="../loome-mockups/index.html" class="nav-btn view-all">View All 8 Mockups →</a>
+            </div>
+        </div>
+
+        <!-- Annotation Examples -->
+        <div class="content-section">
+            <h2>Smart Annotation System</h2>
+            <p style="color: #6c757d; margin-bottom: 20px;">Claude added contextual annotations throughout the mockups:</p>
+
+            <div class="annotation-demo">
+                <div style="margin-top: 20px;">
+                    <h5>Example annotations Claude added:</h5>
+                    <ul style="margin: 15px 0;">
+                        <li><strong style="color: #ff6b6b;">Red callouts</strong> explaining business logic</li>
+                        <li><strong style="color: #206bc4;">Blue helpers</strong> showing field requirements</li>
+                        <li><strong style="color: #f57c00;">Calculation boxes</strong> with live formulas</li>
+                        <li><strong style="color: #dc3545;">Internal field indicators</strong> for cost/margin data</li>
+                    </ul>
+                    <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <code style="color: #666;">
+                            Sale Price = Cost × Multiplier<br>
+                            $75.00 × 1.667 = $125.00
+                        </code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="comparison-side">
+                    <h4>Billy's Original</h4>
+                    <img src="../billy-prototype/index.html" alt="Original" class="comparison-image" style="height: 300px; object-fit: cover;">
+                    <p style="color: #6c757d; font-size: 14px;">Functional but basic React prototype</p>
+                </div>
+                <div class="comparison-side">
+                    <h4>Claude's Mockup</h4>
+                    <img src="../loome-mockups/01-quote-create.html" alt="Mockup" class="comparison-image" style="height: 300px; object-fit: cover;">
+                    <p style="color: #6c757d; font-size: 14px;">Professional UI with full documentation</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features & Benefits -->
+        <div class="content-section">
+            <h2>Mockup Features</h2>
+            
+            <div class="feature-list">
+                <h4>What Claude Added to Each Mockup:</h4>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <div>
+                        <strong>Business Logic Explanations</strong><br>
+                        <span style="color: #6c757d; font-size: 14px;">Every calculation and rule visually documented</span>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <div>
+                        <strong>Field-Level Documentation</strong><br>
+                        <span style="color: #6c757d; font-size: 14px;">Required vs optional, internal vs customer-facing</span>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <div>
+                        <strong>Interactive Demonstrations</strong><br>
+                        <span style="color: #6c757d; font-size: 14px;">Working examples of autocomplete and calculations</span>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <div>
+                        <strong>Integration Points</strong><br>
+                        <span style="color: #6c757d; font-size: 14px;">Shows connections to existing Loome modules</span>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <div>
+                        <strong>HTMX Code Examples</strong><br>
+                        <span style="color: #6c757d; font-size: 14px;">Implementation patterns for dynamic behavior</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Complete Mockups</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">47</div>
+                    <div class="stat-label">Annotations Added</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">15</div>
+                    <div class="stat-label">Business Rules Documented</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">2hrs</div>
+                    <div class="stat-label">Time to Create</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Value Delivered -->
+        <div class="content-section">
+            <h2>The Result</h2>
+            
+            <div style="background: #e8f5e9; padding: 30px; border-radius: 12px;">
+                <h4 style="color: #2e7d32; margin-bottom: 20px;">💡 Product Owner's Reaction</h4>
+                <blockquote style="font-size: 1.2rem; margin: 0; font-style: italic;">
+                    "This is the clearest requirements documentation I've ever seen. I can understand exactly how everything works without reading a single document. The annotations answer every question I would have asked!"
+                </blockquote>
+                <p style="margin-top: 15px; color: #558b2f;">- Sarah Chen, Product Owner</p>
+            </div>
+
+            <div style="margin-top: 30px; padding: 25px; background: #f8f9fa; border-radius: 8px;">
+                <h5 style="color: #2c3e50; margin-bottom: 15px;">Key Advantages of AI-Generated Mockups:</h5>
+                <ul style="margin: 0; padding-left: 20px;">
+                    <li>Visual documentation that's impossible to misinterpret</li>
+                    <li>Business logic embedded directly in the UI</li>
+                    <li>Reduces meetings and clarification requests by 90%</li>
+                    <li>Serves as implementation reference for developers</li>
+                    <li>Can be updated instantly as requirements change</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Timeline Indicator -->
+        <div class="timeline-indicator">
+            <div class="timeline-dot"></div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-dot active"></div>
+            <div class="timeline-dot"></div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <a href="04-architecture.html" class="nav-btn prev">← Previous: Architecture</a>
+            <a href="../loome-mockups/index.html" class="nav-btn view-all">View Mockups Gallery</a>
+            <a href="06-documentation.html" class="nav-btn">Next: Documentation →</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+</body>
+</html>

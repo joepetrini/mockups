@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Rapid Prototyping: From Idea to Implementation</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
+        .header-bar {
+            background: #1a1a1a;
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .header-bar img {
+            height: 40px;
+            display: block;
+        }
+        .presentation-container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 80px 20px 20px 20px;
+        }
+        .title-card {
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+        .title {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+        .subtitle {
+            font-size: 1.5rem;
+            color: #6c757d;
+            margin-bottom: 40px;
+        }
+        .workflow-visual {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .workflow-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 40px;
+            top: 80px;
+            width: 2px;
+            height: 50px;
+            background: #dee2e6;
+        }
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-right: 30px;
+            flex-shrink: 0;
+        }
+        .step-content {
+            flex-grow: 1;
+        }
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .step-description {
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+        .step-link {
+            display: inline-block;
+            padding: 8px 20px;
+            background: #206bc4;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        .step-link:hover {
+            background: #1c5aa0;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(32, 107, 196, 0.3);
+        }
+        .key-points {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 20px;
+        }
+        .key-points h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .key-points ul {
+            list-style: none;
+            padding: 0;
+        }
+        .key-points li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        .key-points li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .navigation {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .nav-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .nav-card:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .nav-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .nav-title {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            .step-number {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            .step-title {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-bar">
+        <img src="../logo.png" alt="Logo">
+    </div>
+    <div class="presentation-container">
+        <!-- Title Card -->
+        <div class="title-card">
+            <h1 class="title">AI-Powered Rapid Prototyping</h1>
+            <p class="subtitle">From Business Idea to Production-Ready Implementation</p>
+            <div style="margin: 40px 0;">
+                <p style="font-size: 1.1rem; color: #495057;">
+                    A revolutionary workflow combining AI assistance with traditional development
+                </p>
+            </div>
+            <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+                <div style="text-align: center;">
+                    <div style="font-size: 3rem; font-weight: 700; color: #667eea;">3</div>
+                    <div style="color: #6c757d;">Team Members</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 3rem; font-weight: 700; color: #764ba2;">7</div>
+                    <div style="color: #6c757d;">Process Steps</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 3rem; font-weight: 700; color: #28a745;">1</div>
+                    <div style="color: #6c757d;">AI Assistant</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workflow Visual -->
+        <div class="workflow-visual">
+            <h2 style="text-align: center; margin-bottom: 40px; color: #2c3e50;">The Complete Workflow</h2>
+            
+            <div class="workflow-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3 class="step-title">Billy Creates Prototype</h3>
+                    <p class="step-description">Project Manager by trade, Alter-ego: Badass prototyper - builds functional React prototype using AI</p>
+                    <a href="01-billy-prototype.html" class="step-link">View Billy's Story →</a>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3 class="step-title">Handoff to Development</h3>
+                    <p class="step-description">Billy demonstrates working prototype to Joe (developer) for implementation</p>
+                    <a href="02-handoff.html" class="step-link">See the Handoff →</a>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3 class="step-title">Requirements Extraction</h3>
+                    <p class="step-description">Joe uses Claude to analyze prototype and extract business requirements</p>
+                    <a href="03-requirements.html" class="step-link">View Process →</a>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3 class="step-title">Architecture Planning</h3>
+                    <p class="step-description">Claude creates implementation plan for Loome ERP integration</p>
+                    <a href="04-architecture.html" class="step-link">See the Plan →</a>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h3 class="step-title">Professional Mockups</h3>
+                    <p class="step-description">Claude generates production-ready mockups with annotations</p>
+                    <a href="05-mockups.html" class="step-link">View Mockups →</a>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-number">6</div>
+                <div class="step-content">
+                    <h3 class="step-title">Documentation & Presentation</h3>
+                    <p class="step-description">Complete workflow documented for team sharing and future projects</p>
+                    <a href="06-documentation.html" class="step-link">Final Results →</a>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-number">7</div>
+                <div class="step-content">
+                    <h3 class="step-title">Sprint Plan</h3>
+                    <p class="step-description">2-week rapid development sprint - from prototype to production!</p>
+                    <a href="07-project-plan.html" class="step-link">View Sprint →</a>
+                </div>
+            </div>
+
+            <div class="key-points">
+                <h3>Key Benefits of This Approach</h3>
+                <ul>
+                    <li>Business users can create functional prototypes without coding</li>
+                    <li>Developers receive working examples instead of abstract requirements</li>
+                    <li>AI extracts and documents all business logic automatically</li>
+                    <li>Architecture decisions are made with full context</li>
+                    <li>Professional mockups serve as living documentation</li>
+                    <li>Entire process is reproducible and scalable</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <h2 style="margin-bottom: 10px; color: #2c3e50;">Explore the Journey</h2>
+            <p style="color: #6c757d; margin-bottom: 30px;">Click any step to see detailed examples and actual outputs</p>
+            
+            <div class="nav-grid">
+                <a href="../billy-prototype/index.html" class="nav-card">
+                    <div class="nav-icon">🚀</div>
+                    <div class="nav-title">Billy's Original Prototype</div>
+                </a>
+                <a href="../loome-mockups/index.html" class="nav-card">
+                    <div class="nav-icon">🎨</div>
+                    <div class="nav-title">Loome Mockups Gallery</div>
+                </a>
+                <a href="workflow-diagram.html" class="nav-card">
+                    <div class="nav-icon">🔄</div>
+                    <div class="nav-title">Interactive Workflow</div>
+                </a>
+                <a href="01-billy-prototype.html" class="nav-card">
+                    <div class="nav-icon">▶️</div>
+                    <div class="nav-title">Start Presentation</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
