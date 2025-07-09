@@ -365,6 +365,7 @@ def notify_external_systems(sender, instance, created, **kwargs):
 ## HTMX Integration Patterns
 
 ### Dynamic UI Components
+{% raw %}
 ```html
 <!-- templates/quotes/partials/line_item_row.html -->
 <tr id="line-item-{{ item.id }}">
@@ -389,6 +390,7 @@ def notify_external_systems(sender, instance, created, **kwargs):
     </td>
 </tr>
 ```
+{% endraw %}
 
 ### Real-time Calculations
 ```python
