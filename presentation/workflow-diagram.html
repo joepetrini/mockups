@@ -30,7 +30,8 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 100px 20px 40px 20px;
+            padding: 80px 20px 40px 20px;
+            margin-top: 70px;
         }
         .header {
             background: white;
@@ -64,7 +65,7 @@
             min-width: 1200px;
         }
         .lane-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #ff0000;
             color: white;
             padding: 20px;
             text-align: center;
@@ -72,13 +73,13 @@
             border-radius: 8px 0 0 0;
         }
         .lane-header.billy {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #ff0000;
         }
         .lane-header.joe {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: #1a1a1a;
         }
         .lane-header.claude {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: #6c757d;
         }
         .lane-label {
             display: flex;
@@ -89,16 +90,16 @@
             font-weight: 600;
         }
         .lane-label.billy {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff0000;
         }
         .lane-label.joe {
-            background: rgba(240, 147, 251, 0.1);
-            color: #f093fb;
+            background: rgba(26, 26, 26, 0.1);
+            color: #1a1a1a;
         }
         .lane-label.claude {
-            background: rgba(79, 172, 254, 0.1);
-            color: #4facfe;
+            background: rgba(108, 117, 125, 0.1);
+            color: #6c757d;
         }
         .lane-content {
             display: grid;
@@ -134,13 +135,13 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         .process-step.billy {
-            border-color: #667eea;
+            border-color: #ff0000;
         }
         .process-step.joe {
-            border-color: #f093fb;
+            border-color: #1a1a1a;
         }
         .process-step.claude {
-            border-color: #4facfe;
+            border-color: #6c757d;
         }
         .step-icon {
             font-size: 2rem;
@@ -210,7 +211,7 @@
             display: inline-block;
             width: 30px;
             height: 30px;
-            background: #667eea;
+            background: #ff0000;
             color: white;
             border-radius: 50%;
             line-height: 30px;
@@ -272,7 +273,7 @@
         .metric-value {
             font-size: 2rem;
             font-weight: 700;
-            color: #667eea;
+            color: #ff0000;
             margin-bottom: 5px;
         }
         .metric-label {
@@ -518,15 +519,15 @@
         <!-- Legend -->
         <div class="legend">
             <div class="legend-item">
-                <div class="legend-color" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                <div class="legend-color" style="background: #ff0000;"></div>
                 <span>Billy (Product Owner)</span>
             </div>
             <div class="legend-item">
-                <div class="legend-color" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                <div class="legend-color" style="background: #1a1a1a;"></div>
                 <span>Joe (Developer)</span>
             </div>
             <div class="legend-item">
-                <div class="legend-color" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                <div class="legend-color" style="background: #6c757d;"></div>
                 <span>Claude (AI Assistant)</span>
             </div>
         </div>
